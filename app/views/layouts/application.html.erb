@@ -22,7 +22,11 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-body-tertiary">
+    <%= render "layouts/top_nav" %>
+    <%= render "layouts/top_secardary_nav" %>
+    <main class="container-fluid">
+      <%= yield %>
+    </main>
   </body>
 </html>
