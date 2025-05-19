@@ -1,16 +1,13 @@
 <div class="row mt-3">
-  <div class="col-12 col-sm-3">
-    <div class="card">
-      <div class="card-body">
-        <%= link_to "Edit this virtual user", edit_virtual_user_path(@virtual_user) %>
-        <%= link_to "Back to virtual users", virtual_users_path %>
-
-        <%= button_to "Destroy this virtual user", @virtual_user, method: :delete %>
+  <div class="col-12 col-sm-9">
+    <div class="align-items-center p-3 mb-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">虚拟用户详情</p>
+      <div class="d-flex gap-2 float-end">
+        <%= link_to "一览", virtual_users_path, class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "编辑", edit_virtual_user_path(@virtual_user), class: "btn btn-sm btn-primary" %>
+        <%= button_to "删除", @virtual_user, method: :delete, class: "btn btn-sm btn-danger", data: { turbo_confirm: "确认删除？" } %>
       </div>
     </div>
-  </div>
-  <div class="col-12 col-sm-9">
-    <p style="color: green"><%= notice %></p>
 
     <div class="list-group mb-3">
       <%= render @virtual_user %>

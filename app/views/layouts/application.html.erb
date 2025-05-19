@@ -25,6 +25,7 @@
   <body class="bg-body-tertiary">
     <%= render "layouts/top_nav" %>
     <%= render "layouts/top_secardary_nav" %>
+    <%= render "shared/toast" if notice %>
     <main class="container-fluid">
       <%= yield %>
     </main>
