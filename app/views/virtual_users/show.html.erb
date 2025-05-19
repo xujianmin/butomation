@@ -1,0 +1,19 @@
+<div class="row mt-3">
+  <div class="col-12 col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <%= link_to "Edit this virtual user", edit_virtual_user_path(@virtual_user) %>
+        <%= link_to "Back to virtual users", virtual_users_path %>
+
+        <%= button_to "Destroy this virtual user", @virtual_user, method: :delete %>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-9">
+    <p style="color: green"><%= notice %></p>
+
+    <div class="list-group mb-3">
+      <%= render @virtual_user %>
+    </div>
+  </div>
+</div>

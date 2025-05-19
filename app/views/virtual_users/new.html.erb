@@ -1,0 +1,18 @@
+<% content_for :title, "New virtual user" %>
+
+<div class="row"> 
+  <div class="col-12 col-sm-9">
+    <div class="align-items-center p-3 my-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">新增虚拟用户</p>
+      <%= link_to virtual_users_path, class: "float-end btn btn-sm btn-primary" do %>
+        <i class="bi bi-people-fill"></i>
+        虚拟用户一览
+      <% end %>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <%= render "form", virtual_user: @virtual_user %>
+      </div>
+    </div>
+  </div>
+</div>

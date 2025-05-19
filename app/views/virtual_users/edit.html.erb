@@ -1,0 +1,23 @@
+<% content_for :title, "Editing virtual user" %>
+
+<div class="row mt-3">
+  <div class="col-12 col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <%= link_to "Show this virtual user", @virtual_user %>
+        <%= link_to "Back to virtual users", virtual_users_path %>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-9">
+    <div class="align-items-center p-3 my-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">更新虚拟用户</p>
+      <%= link_to virtual_user_path(@virtual_user), class: "float-end btn btn-sm btn-primary" do %>
+        <i class="bi bi-person-circle"></i>
+        虚拟用户详情
+      <% end %>
+    </div>
+
+    <%= render "form", virtual_user: @virtual_user %>
+  </div>
+</div>
