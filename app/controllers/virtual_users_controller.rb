@@ -66,6 +66,6 @@ class VirtualUsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def virtual_user_params
-      params.expect(virtual_user: [ :last_name, :first_name, :gender, :email, :civ_style ])
+      params.expect(virtual_user: [ :last_name, :first_name, :gender, :email, :civ_style, :birthdate ])
     end
 end

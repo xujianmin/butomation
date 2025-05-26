@@ -36,9 +36,18 @@
   <div class="row mb-3">
     <div class="col">
       <%= form.label :email, class: "form-label" %>
-      <%= form.email_field :email, class: "form-control" %>
+      <%= form.text_field :email, class: "form-control" %>
     </div>
-
+    <div class="col">
+      <%= form.label :domain, class: "form-label" %>
+      <%= form.select :domain, VirtualUser.domains.keys.map { |k| [VirtualUser.domains[k], k] }, {}, class: "form-select" %>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <%= form.label :birthdate, class: "form-label" %>
+      <%= form.date_field :birthdate, class: "form-control" %>
+    </div>
     <div class="col">
       <%= form.label :civ_style, class: "form-label" %>
       <%= form.select :civ_style, VirtualUser.civ_styles.keys.map { |k| [VirtualUser.civ_styles[k], k] }, {}, class: "form-select" %>

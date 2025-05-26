@@ -1,5 +1,6 @@
 class VirtualUser < ApplicationRecord
   validates :email, presence: true
+  validates :birthdate, presence: true
 
   has_one :pokermon, class_name: "Sites::Pokermon", dependent: :destroy
 
@@ -9,12 +10,62 @@ class VirtualUser < ApplicationRecord
     west: "西方"
   }, prefix: true
 
+  enum :domain, {
+    pukapuka2025: "pukapuka2025.com",
+    drexopy:      "drexopy.com",
+    cooooldash:   "cooooldash.com",
+    wulimail:     "wulimail.com",
+    truetora:     "truetora.com",
+    "8bitone":    "8bitone.com",
+    litboxnet:    "litboxnet.com",
+    glowinow:     "glowinow.com",
+    nxtmails:     "nxtmails.com",
+    playbafun:    "playbafun.com",
+    wavescoming:  "wavescoming.com",
+    xyzonexyz:    "xyzonexyz.com",
+    cybroiday:    "cybroiday.com",
+    zzplayzz:     "zzplayzz.com",
+    bitwandering: "bitwandering.com",
+    revelmon:     "revelmon.com",
+    codevibest:   "codevibest.com",
+    bitzwild:     "bitzwild.com",
+    trytrywaves:  "trytrywaves.com",
+    urbantok:     "urbantok.com",
+    looplaab:     "looplaab.com",
+    bytefluxit:   "bytefluxit.com",
+    metazhidao:   "metazhidao.com",
+    xinlime:      "xinlime.com",
+    nihencool:    "nihencool.com"
+  }, prefix: true
+
   def fullname
     if civ_style_china? || civ_style_japan?
       "#{last_name}#{first_name}"
     else
       "#{first_name} #{last_name}"
     end
+  end
+
+  def age
+    return nil unless birthdate
+    now = Time.current.to_date
+    now.year - birthdate.year - (birthdate.change(year: now.year) > now ? 1 : 0)
+  end
+
+  def generate_random_birthdate
+    today = Date.today
+    min_age = 18
+    max_age = 75
+
+    # 计算最小和最大生日
+    max_birthdate = today - min_age.years
+    min_birthdate = today - max_age.years
+
+    # 生成随机日期
+    days_range = (min_birthdate..max_birthdate).count
+    random_days = rand(days_range)
+
+    min_birthdate + random_days
   end
 
   # 生成中国姓氏
@@ -123,8 +174,9 @@ class VirtualUser < ApplicationRecord
     name_chars.sample
   end
 
+  # 随机生成 VirtualUser 的属性
   def randomize_virtual_user
-    self.civ_style = [ "中国", "日本", "西方" ].sample
+    self.civ_style = VirtualUser.civ_styles.keys.sample
     self.gender = Faker::Gender.binary_type == "Male" ? "男" : "女"
 
     case self.civ_style
@@ -143,6 +195,10 @@ class VirtualUser < ApplicationRecord
       self.first_name = jp_first_name(self.gender)
       self.last_name = jp_last_name
     end
+
     self.email = Faker::Internet.username(specifier: 1..8)
+    self.domain = VirtualUser.domains.keys.sample
+
+    self.birthdate = generate_random_birthdate
   end
 end

@@ -33,12 +33,22 @@
     </div>
   </div>
 
-  <div class="row mb-3">
+  <div class="row my-3">
     <div class="col">
       <%= form.label :email, class: "form-label" %>
       <%= form.text_field :email, class: "form-control", readonly: true %>
     </div>
+    <div class="col">
+      <%= form.label :domain, class: "form-label" %>
+      <%= form.select :domain, VirtualUser.domains.keys.map { |k| [VirtualUser.domains[k], k] }, {}, class: "form-select", readonly: true, style: "pointer-events: none; opacity: 0.7;" %>
+    </div>
+  </div>
 
+  <div class="row mb-3">
+    <div class="col">
+      <%= form.label :birthdate, class: "form-label" %>
+      <%= form.text_field :birthdate, class: "form-control", readonly: true %>
+    </div>
     <div class="col">
       <%= form.label :civ_style, class: "form-label" %>
       <%= form.select :civ_style, VirtualUser.civ_styles.keys.map { |k| [VirtualUser.civ_styles[k], k] }, {}, class: "form-select", readonly: true, style: "pointer-events: none; opacity: 0.7;" %>
