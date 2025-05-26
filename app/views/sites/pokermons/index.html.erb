@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Pokermons" %>
+
+<h1>Pokermons</h1>
+
+<div id="sites_pokermons">
+  <% @sites_pokermons.each do |sites_pokermon| %>
+    <%= render sites_pokermon %>
+    <p>
+      <%= link_to "Show this pokermon", sites_pokermon %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New pokermon", new_sites_pokermon_path %>

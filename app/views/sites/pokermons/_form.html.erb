@@ -1,0 +1,47 @@
+<%= form_with(model: sites_pokermon) do |form| %>
+  <% if sites_pokermon.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(sites_pokermon.errors.count, "error") %> prohibited this sites_pokermon from being saved:</h2>
+
+      <ul>
+        <% sites_pokermon.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :nickname, style: "display: block" %>
+    <%= form.text_field :nickname %>
+  </div>
+
+  <div>
+    <%= form.label :kana, style: "display: block" %>
+    <%= form.text_field :kana %>
+  </div>
+
+  <div>
+    <%= form.label :registry_cellphone, style: "display: block" %>
+    <%= form.text_field :registry_cellphone %>
+  </div>
+
+  <div>
+    <%= form.label :registry_postcode, style: "display: block" %>
+    <%= form.text_field :registry_postcode %>
+  </div>
+
+  <div>
+    <%= form.label :registry_fandi, style: "display: block" %>
+    <%= form.text_field :registry_fandi %>
+  </div>
+
+  <div>
+    <%= form.label :reg_password, style: "display: block" %>
+    <%= form.text_field :reg_password %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

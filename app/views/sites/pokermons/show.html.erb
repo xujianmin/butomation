@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @sites_pokermon %>
+
+<div>
+  <%= link_to "Edit this pokermon", edit_sites_pokermon_path(@sites_pokermon) %> |
+  <%= link_to "Back to pokermons", sites_pokermons_path %>
+
+  <%= button_to "Destroy this pokermon", @sites_pokermon, method: :delete %>
+</div>

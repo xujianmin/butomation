@@ -1,6 +1,8 @@
 class VirtualUser < ApplicationRecord
   validates :email, presence: true
 
+  has_one :pokermon, class_name: "Sites::Pokermon", dependent: :destroy
+
   enum :civ_style, {
     china: "中国",
     japan: "日本",
