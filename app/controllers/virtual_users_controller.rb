@@ -13,6 +13,7 @@ class VirtualUsersController < ApplicationController
   # GET /virtual_users/new
   def new
     @virtual_user = VirtualUser.new
+    @virtual_user.randomize_virtual_user
   end
 
   # GET /virtual_users/1/edit
