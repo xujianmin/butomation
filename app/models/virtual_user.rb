@@ -182,11 +182,15 @@ class VirtualUser < ApplicationRecord
     case self.civ_style
     when "west"
       if self.gender == "男"
-        self.first_name = Faker::Name.male_first_name
-        self.last_name = Faker::Name.last_name
+        I18n.with_locale(:en) do
+          self.first_name = Faker::Name.male_first_name
+          self.last_name = Faker::Name.last_name
+        end
       else
-        self.first_name = Faker::Name.female_first_name
-        self.last_name = Faker::Name.last_name
+        I18n.with_locale(:en) do
+          self.first_name = Faker::Name.female_first_name
+          self.last_name = Faker::Name.last_name
+        end
       end
     when "china"
       self.first_name = cn_first_name(self.gender)
