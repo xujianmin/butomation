@@ -12,7 +12,9 @@ class Sites::PokermonsController < ApplicationController
 
   # GET /sites/pokermons/new
   def new
-    @sites_pokermon = Sites::Pokermon.new
+    # @sites_pokermon = Sites::Pokermon.new
+    @sites_pokermon = Sites::Pokermon.new(virtual_user_id: params[:virtual_user_id])
+    @virtual_user = VirtualUser.find(params[:virtual_user_id])
   end
 
   # GET /sites/pokermons/1/edit
@@ -22,10 +24,11 @@ class Sites::PokermonsController < ApplicationController
   # POST /sites/pokermons or /sites/pokermons.json
   def create
     @sites_pokermon = Sites::Pokermon.new(sites_pokermon_params)
+    @virtual_user = VirtualUser.find(params[:sites_pokermon][:virtual_user_id])
 
     respond_to do |format|
       if @sites_pokermon.save
-        format.html { redirect_to @sites_pokermon, notice: "Pokermon was successfully created." }
+        format.html { redirect_to virtual_user_path(@sites_pokermon.virtual_user), notice: "Pokermon was successfully created." }
         format.json { render :show, status: :created, location: @sites_pokermon }
       else
         format.html { render :new, status: :unprocessable_entity }

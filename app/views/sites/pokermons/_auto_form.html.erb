@@ -1,0 +1,46 @@
+<%= form_with(model: sites_pokermon) do |form| %>
+  <% if sites_pokermon.errors.any? %>
+    <%= render "shared/form_alert", model: sites_pokermon %>
+  <% end %>
+
+  <div class="row mb-3">
+    <div class="col-12 col-sm-6">
+      <%= form.label :nickname, class: "form-label" %>
+      <%= form.text_field :nickname, value: @virtual_user.email, class: "form-control", readonly: true %>
+    </div>
+    <div class="col-12 col-sm-6">
+      <%= form.label :kana, class: "form-label" %>
+      <%= form.text_field :kana, placeholder: "输入昵称的日语假名", class: "form-control" %>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-12 col-sm-6">
+      <%= form.label :registry_cellphone, class: "form-label" %>
+      <%= form.text_field :registry_cellphone, class: "form-control", value: sites_pokermon.generate_registry_jp_cellphone %>
+    </div>
+    <div class="col-12 col-sm-6">
+      <%= form.label :registry_postcode, class: "form-label" %>
+      <%= form.text_field :registry_postcode, class: "form-control", value: "332-0017" %>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12 col-sm-6">
+      <%= form.label :registry_fandi, class: "form-label" %>
+      <%= form.text_field :registry_fandi, class: "form-control", value: "1-7-4-704" %>
+    </div>
+    <div class="col-12 col-sm-6">
+      <%= form.label :reg_password, class: "form-label" %>
+      <%= form.text_field :reg_password, class: "form-control", value: "1234QWER." %>
+    </div>
+  </div>
+
+  <div class="d-none">
+    <%= form.label :virtual_user_id, style: "display: block" %>
+    <%= form.text_field :virtual_user_id %>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,32 +1,43 @@
-<div id="<%= dom_id pokermon %>">
-  <p>
-    <strong>Nickname:</strong>
-    <%= pokermon.nickname %>
-  </p>
-
-  <p>
-    <strong>Kana:</strong>
-    <%= pokermon.kana %>
-  </p>
-
-  <p>
-    <strong>Registry cellphone:</strong>
-    <%= pokermon.registry_cellphone %>
-  </p>
-
-  <p>
-    <strong>Registry postcode:</strong>
-    <%= pokermon.registry_postcode %>
-  </p>
-
-  <p>
-    <strong>Registry fandi:</strong>
-    <%= pokermon.registry_fandi %>
-  </p>
-
-  <p>
-    <strong>Reg password:</strong>
-    <%= pokermon.reg_password %>
-  </p>
-
+<div class="card" id="<%= dom_id pokermon %>">
+  <div class="card-header">
+    <strong class="card-title">宝可梦账户关联信息</strong>
+    <small class="text-muted float-end">更新于：<%= pokermon.updated_at.strftime("%Y-%m-%d %H:%M:%S") %></small>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-12 col-sm-6">
+        <label for="nickname" class="form-label"><%= t "activerecord.attributes.sites/pokermon.nickname" %></label>
+        <input type="text" class="form-control" id="nickname" value="<%= pokermon.nickname %>" disabled="true" >
+      </div>
+      <div class="col-12 col-sm-6">
+        <label for="kana" class="form-label"><%= t "activerecord.attributes.sites/pokermon.kana" %></label>
+        <input type="text" class="form-control" id="kana" value="<%= pokermon.kana %>" disabled="true" >
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-12 col-sm-6">
+        <label for="registry_cellphone" class="form-label"><%= t "activerecord.attributes.sites/pokermon.registry_cellphone" %></label>
+        <input type="text" class="form-control" id="registry_cellphone" value="<%= pokermon.registry_cellphone %>" disabled="true" >
+      </div>
+      <div class="col-12 col-sm-6">
+        <label for="registry_postcode" class="form-label"><%= t "activerecord.attributes.sites/pokermon.registry_postcode" %></label>
+        <input type="text" class="form-control" id="registry_postcode" value="<%= pokermon.registry_postcode %>" disabled="true" >
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <label for="registry_fandi" class="form-label"><%= t "activerecord.attributes.sites/pokermon.registry_fandi" %></label>
+        <input type="text" class="form-control" id="registry_fandi" value="<%= pokermon.registry_fandi %>" disabled="true" >
+      </div>
+      <div class="col-12 col-sm-6">
+        <label for="reg_password" class="form-label"><%= t "activerecord.attributes.sites/pokermon.reg_password" %></label>
+        <input type="text" class="form-control" id="reg_password" value="<%= pokermon.reg_password %>" disabled="true" >
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <%= link_to "注册", "#", class: "btn btn-primary btn-sm" %>
+    <%= link_to "登陆", "#", class: "btn btn-primary btn-sm" %>
+    <%= link_to "修改验证后手机/密码", "#", class: "btn btn-success btn-sm" %>
+  </div>
 </div>

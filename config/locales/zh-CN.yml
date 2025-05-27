@@ -8,7 +8,8 @@ zh-CN:
           has_one: 由于%{record}需要此记录，所以无法移除记录
           has_many: 由于%{record}需要此记录，所以无法移除记录
     models:
-      virtual_user: "虚拟用户"
+      virtual_user: 虚拟用户
+      sites/pokermon: 宝可梦账户关联
     attributes:
       virtual_user:
         last_name: 姓氏
@@ -17,6 +18,14 @@ zh-CN:
         gender: 性别
         email: 邮箱前缀
         domain: 邮箱域名
+        civ_style: 姓名风格
+      sites/pokermon:
+        nickname: 昵称
+        kana: 日语假名
+        registry_cellphone: 注册时手机号
+        registry_postcode: 注册时邮编
+        registry_fandi: 注册时地址
+        reg_password: 注册默认密码
   date:
     abbr_day_names:
     - 周日
@@ -121,7 +130,7 @@ zh-CN:
       wrong_length: 长度非法（必须为%{count}个字符）
     template:
       body: 如下字段出现错误：
-      header: 有 %{count} 个错误发生导致 “%{model}” 无法被保存。
+      header: 有 %{count} 个错误发生导致 "%{model}" 无法被保存。
   helpers:
     select:
       prompt: 请选择
