@@ -46,6 +46,10 @@ class VirtualUser < ApplicationRecord
     end
   end
 
+  def email_address
+    email + "@" + domain
+  end
+
   def age
     return nil unless birthdate
     now = Time.current.to_date

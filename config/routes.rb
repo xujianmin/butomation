@@ -3,7 +3,13 @@ Rails.application.routes.draw do
     resources :pokermons
   end
   resources :virtual_users do
-    resources :pokermons, module: :sites
+    resources :pokermons, module: :sites do
+      member do
+        get :register
+        get :login
+        get :change_password
+      end
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

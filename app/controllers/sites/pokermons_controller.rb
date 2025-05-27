@@ -60,6 +60,17 @@ class Sites::PokermonsController < ApplicationController
     end
   end
 
+  def register
+    @sites_pokermon = Sites::Pokermon.find(params.expect(:id))
+    @virtual_user = @sites_pokermon.virtual_user
+  end
+
+  def login
+  end
+
+  def revise_activated_cellphone_and_maintained_password
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sites_pokermon

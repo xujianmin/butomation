@@ -12,4 +12,8 @@ class Sites::Pokermon < ApplicationRecord
 
     [ "080", "090" ].sample + (0...8).map { Random.new.rand(0..9) }.join
   end
+
+  def email_address
+    self.email + self.domain
+  end
 end
