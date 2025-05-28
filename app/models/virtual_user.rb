@@ -47,7 +47,7 @@ class VirtualUser < ApplicationRecord
   end
 
   def email_address
-    email + "@" + domain
+    email + "@" + self.class.domains[domain]
   end
 
   def age

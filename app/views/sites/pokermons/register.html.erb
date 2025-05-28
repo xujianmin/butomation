@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
   <div class="col-12">
     <div class="card">
       <div class="card-header">
@@ -18,8 +18,23 @@
       </div>
       <div class="card-body">
         数据：
-        <%= @virtual_user.email %>
+        <%= @virtual_user.email_address %>
         <%= link_to "bot:发送邀请链接", "#", class: "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <strong class="card-title">步骤二：进入邀请链接，完成用户信息输入</strong>
+      </div>
+      <div class="card-body">
+        数据：
+        <%= @sites_pokermon.nickname %>
+        <%= link_to "bot:自动注册", "#", class: "btn btn-primary btn-sm" %>
       </div>
     </div>
   </div>

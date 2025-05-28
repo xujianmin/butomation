@@ -18,16 +18,15 @@
         创建宝可梦账户关联
       <% end %>
     <% else %>
-      <div class="list-group mb-3">
-        <%= render @virtual_user.pokermon %>
+      <%= render @virtual_user.pokermon %>
+      <div class="row mt-3">
+        <div class="col-12">
+          <%= link_to "注册", register_virtual_user_pokermon_path(@virtual_user, @virtual_user.pokermon), class: "btn btn-primary btn-sm" %>
+          <%= link_to "登陆", "#", class: "btn btn-primary btn-sm" %>
+          <%= link_to "修改验证后手机/密码", "#", class: "btn btn-success btn-sm" %>
+        </div>
       </div>
     <% end %>
-    <div class="row">
-      <div class="col-12">
-        <%= link_to "注册", register_virtual_user_pokermon_path(@virtual_user, @virtual_user.pokermon), class: "btn btn-primary btn-sm" %>
-        <%= link_to "登陆", "#", class: "btn btn-primary btn-sm" %>
-        <%= link_to "修改验证后手机/密码", "#", class: "btn btn-success btn-sm" %>
-      </div>
-    </div>
+    
   </div>
 </div>
