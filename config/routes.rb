@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :sites do
-    resources :pokermons
-  end
   resources :virtual_users do
     resources :pokermons, module: :sites do
       member do
@@ -9,6 +6,10 @@ Rails.application.routes.draw do
         get :login
         get :change_password
       end
+    end
+
+    namespace :sites do
+      resources :pokermons
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -22,5 +23,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "dashboard#home"
 end
