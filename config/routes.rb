@@ -7,10 +7,10 @@ Rails.application.routes.draw do
         get :change_password
       end
     end
+  end
 
-    namespace :sites do
-      resources :pokermons
-    end
+  namespace :sites do
+    resources :pokermons
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

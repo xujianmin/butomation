@@ -1,29 +1,31 @@
-<% if current_page?(virtual_user) %>
-  <div class="list-group-item" id="<%= dom_id(virtual_user) %>">
-  <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1"><%= virtual_user.fullname %></h5>
-    <small><%= virtual_user.created_at %></small>
-  </div>
-  <hr class="my-1" />
-  <small class="d-inline-flex my-1 px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">
-    <%= virtual_user.gender %>
-  </small>
-  <small class="d-inline-flex my-1 px-2 py-1 fw-semibold text-success-emphasis bg-info-subtle border border-success-subtle rounded-2">
-    <%= virtual_user.email %>
-  </small>
-</div>
-<% else %>
-  <%= link_to virtual_user, class: "list-group-item list-group-item-action", id: dom_id(virtual_user) do %>
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1 link-offset-1"><%= virtual_user.fullname %></h5>
-      <small><%= virtual_user.created_at %></small>
+<div class="card" id="<%= dom_id(virtual_user) %>">
+  <%= link_to virtual_user, class: "text-decoration-none" do %>
+    <div class="card-header">
+      <strong class="card-title"><%= virtual_user.fullname %></strong>
+      <% if virtual_user.pokermon %>
+        <span class="badge bg-success float-end">
+          <%= t("activerecord.models.#{virtual_user.pokermon.class.name.underscore}") %>
+        </span>
+      <% else %>
+        <span class="badge bg-secondary float-end">暂无关联账户</span>
+      <% end %>
     </div>
-    <hr class="my-1" />
-    <small class="d-inline-flex my-1 px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">
-      <%= virtual_user.gender %>
-    </small>
-    <small class="d-inline-flex my-1 px-2 py-1 fw-semibold text-success-emphasis bg-info-subtle border border-success-subtle rounded-2">
-      <%= virtual_user.email %>
-    </small>
-  <% end %>
-<% end %>
+    <div class="card-body">
+      <p class="fs-8 text-muted mb-1">
+        <%= virtual_user.gender %> / 
+        <%= virtual_user.birthdate %> /
+        <%= virtual_user.age %> 岁
+      </p>
+      <p class="fs-8 text-muted mb-0"><%= virtual_user.email_address %></p> 
+    </div>
+  <% end%>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to edit_virtual_user_path(virtual_user), class: "btn btn-sm btn-outline-primary" do %>
+      <i class="bi bi-pencil-square"></i>
+    <% end %>
+    <%= link_to virtual_user_path(virtual_user), class: "ms-3 btn btn-sm btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "确定删除吗？" } do %>
+      <i class="bi bi-trash"></i>
+    <% end %>
+  </div>
+</div>
+

@@ -7,19 +7,19 @@
     <div class="navbar-collapse offcanvas-collapse" data-navbar-target="collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <%= link_to "Dashboard", root_path, aria: { current: "page" }, class: "nav-link active" %>
+          <%= link_to "控制台", root_path, aria: { current: "page" }, class: "nav-link" %>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">虚拟用户</a>
+          <%= link_to "虚拟用户", virtual_users_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Profile</a>
+          <a class="nav-link" href="#">抽签计划</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Switch account</a>
+          <a class="nav-link" href="#">统计报表</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">设置</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>

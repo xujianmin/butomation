@@ -1,4 +1,4 @@
-<%= form_with(model: sites_pokermon) do |form| %>
+<%= form_with(model: sites_pokermon, url: virtual_user_pokermons_path(@virtual_user)) do |form| %>
   <% if sites_pokermon.errors.any? %>
     <%= render "shared/form_alert", model: sites_pokermon %>
   <% end %>
