@@ -7,6 +7,9 @@
         新增虚拟用户
       <% end %>
     </div>
+
+    <%= render "shared/filter" %>
+    
     <div class="row">
       <% @virtual_users.each do |virtual_user| %>
         <div class="col-12 col-sm-6 col-md-4 mb-3">

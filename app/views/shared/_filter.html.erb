@@ -1,0 +1,24 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <%= form_with url: virtual_users_path, method: :get, class: "row row-cols-lg-auto align-items-center" do |form| %>
+      <div class="form-group mr-2 mb-sm-0 mb-3">
+        <%= form.label :sort, class: "sr-only visually-hidden" %>
+        <%= form.select :sort, 
+            options_for_select([
+                ['按更新日期升序', 'created_at-asc'], 
+                ['按更新日期降序', 'created_at-desc']
+            ], params[:sort]), 
+            { include_blank: "按更新日期排序" }, 
+            class: "form-select"
+        %>
+      </div>
+      <div class="col-12 mb-sm-0 mb-3">
+        <%= form.label :query, class: "sr-only visually-hidden" %>
+        <%= form.text_field :query, class: "form-control", placeholder: "姓、名、邮箱" %>
+      </div>
+      <div class="col-12">
+        <%= form.button "搜索", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
