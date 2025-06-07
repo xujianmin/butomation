@@ -1,4 +1,5 @@
 class VirtualUser < ApplicationRecord
+  # 配置搜索
   include PgSearch::Model
   pg_search_scope :text_search,
     against: [ :last_name, :first_name, :email ],
@@ -9,9 +10,28 @@ class VirtualUser < ApplicationRecord
       }
     }
 
+  # 搜索相关
+  FILTERS_PARAMS = %i[query sort].freeze
+
+  scope :search, ->(query) { query.present? ? text_search(query) : all }
+  scope :sorted, ->(selection) { selection.present? ? apply_sort(selection) : all }
+
+  def self.apply_sort(selection)
+    sort, direction = selection.split("-")
+    order("virtual_users.#{sort} #{direction}")
+  end
+
+  def self.filter(filters)
+    includes(:pokermon)
+      .search(filters["query"])
+      .sorted(filters["sort"])
+  end
+
+  # 校验数据
   validates :email, presence: true
   validates :birthdate, presence: true
 
+  # 模型关联
   has_one :pokermon, class_name: "Sites::Pokermon", dependent: :destroy
 
   enum :civ_style, {
