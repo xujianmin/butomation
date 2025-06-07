@@ -92,3 +92,7 @@ body {
 .bg-purple {
   background-color: #6f42c1;
 }
+
+.breadcrumb_active {
+  pointer-events: none;
+}

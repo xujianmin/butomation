@@ -1,16 +1,11 @@
 <div class="nav-scroller bg-body shadow-sm">
   <nav class="nav" aria-label="Secondary navigation">
-    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-    <a class="nav-link" href="#">
-      Friends
-      <span class="badge text-bg-light rounded-pill align-text-bottom">27</span>
-    </a>
-    <a class="nav-link" href="#">Explore</a>
-    <a class="nav-link" href="#">Suggestions</a>
-    <a class="nav-link" href="#">Link</a>
-    <a class="nav-link" href="#">Link</a>
-    <a class="nav-link" href="#">Link</a>
-    <a class="nav-link" href="#">Link</a>
-    <a class="nav-link" href="#">Link</a>
+    <% if controller_name == "dashboard" %>
+      <a class="nav-link active" aria-current="page" style="pointer-events: none;">首页</a>
+    <% end %>
+    <%= breadcrumbs separator: "<a class='nav-link' style='padding-left: 0; padding-right: 0;'>/</a>",
+                    link_class: "nav-link",
+                    current_class: "nav-link active breadcrumb_active",
+                    container_tag: "a" %>
   </nav>
 </div>
