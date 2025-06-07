@@ -1,4 +1,14 @@
 class VirtualUser < ApplicationRecord
+  include PgSearch::Model
+  pg_search_scope :text_search,
+    against: [ :last_name, :first_name, :email ],
+    using: {
+      tsearch: {
+        any_word: true,
+        prefix: true
+      }
+    }
+
   validates :email, presence: true
   validates :birthdate, presence: true
 

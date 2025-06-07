@@ -3,7 +3,19 @@ class VirtualUsersController < ApplicationController
 
   # GET /virtual_users or /virtual_users.json
   def index
-    @virtual_users = VirtualUser.all
+    # @virtual_users = VirtualUser.all
+    if search_params.present?
+      @virtual_users = VirtualUser.includes(:pokermon)
+      # @virtual_users = @virtual_users.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", "%#{search_params[:query]}%", "%#{search_params[:query]}%", "%#{search_params[:query]}%") if search_params[:query].present?
+      @virtual_users = @virtual_users.text_search(search_params[:query]) if search_params[:query].present?
+
+      if search_params[:sort].present?
+        sort = search_params[:sort].split("-")
+        @virtual_users = @virtual_users.order("#{sort[0]} #{sort[1]}")
+      end
+    else
+      @virtual_users = VirtualUser.includes(:pokermon).all
+    end
   end
 
   # GET /virtual_users/1 or /virtual_users/1.json
@@ -67,5 +79,9 @@ class VirtualUsersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def virtual_user_params
       params.expect(virtual_user: [ :last_name, :first_name, :gender, :email, :civ_style, :birthdate, :domain ])
+    end
+
+    def search_params
+      params.permit(:query, :sort)
     end
 end
