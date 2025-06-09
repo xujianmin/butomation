@@ -1,4 +1,8 @@
-source "https://rubygems.org"
+if ENV['GEM_SOURCE'] == 'aliyun'
+  source "https://mirrors.aliyun.com/rubygems/"
+else
+  source "https://rubygems.org"
+end
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.2"
