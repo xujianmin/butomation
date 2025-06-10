@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
+  
   resources :virtual_users do
     resources :pokermons, module: :sites do
       member do

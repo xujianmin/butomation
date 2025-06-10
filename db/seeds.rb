@@ -7,3 +7,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# 创建默认管理员用户
+User.find_or_create_by!(email_address: "admin@usingnow.tech") do |user|
+  user.password = "password"
+  user.password_confirmation = "password"
+end
