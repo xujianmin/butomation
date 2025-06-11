@@ -14,7 +14,7 @@
     <div class="col">
       <%= form.label :title, class: "form-label" %>
       <%= form.text_field :title, class: "form-control" %>
-      <div id="titleHelp" class="form-text">简要描述抽签计划，如“抽取100个宝可梦黑盒”。</div>
+      <div id="titleHelp" class="form-text">简要描述抽签计划，如"抽取100个宝可梦黑盒"。</div>
     </div>
   </div>
 
@@ -36,6 +36,30 @@
       <%= form.label :target_url, class: "form-label" %>
       <%= form.text_field :target_url, class: "form-control" %>
       <div id="urlHelp" class="form-text">抽签产品页面网址。如未公布请留空。</div>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col">
+      <%= form.label :priority, "优先级", class: "form-label" %>
+      <%= form.select :priority, Lottery.priorities.keys.map { |k| [Lottery.priorities[k], k] }, {}, class: "form-select" %>
+    </div>
+    <div class="col">
+      <%= form.label :status, "状态", class: "form-label" %>
+      <%= form.select :status, Lottery.statuses.keys.map { |k| [Lottery.statuses[k], k] }, {}, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col">
+      <%= form.label :meeting_url, "会议链接", class: "form-label" %>
+      <%= form.text_field :meeting_url, class: "form-control" %>
+      <div id="meetingUrlHelp" class="form-text">抽签会议链接，如未安排请先留空。</div>
+    </div>
+    <div class="col">
+      <%= form.label :meeting_code, "会议密码", class: "form-label" %>
+      <%= form.text_field :meeting_code, class: "form-control" %>
+      <div id="meetingCodeHelp" class="form-text">抽签会议密码，如未安排请先留空。</div>
     </div>
   </div>
 

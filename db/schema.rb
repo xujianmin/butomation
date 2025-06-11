@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_11_074736) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_11_174912) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_074736) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owner_id"
+    t.string "priority"
+    t.string "status"
+    t.string "meeting_url"
+    t.string "meeting_code"
     t.index ["owner_id"], name: "index_lotteries_on_owner_id"
     t.index ["user_id"], name: "index_lotteries_on_user_id"
   end

@@ -1,24 +1,85 @@
 <div class="card" id="<%= dom_id(lottery) %>">
   <%= link_to lottery, class: "text-decoration-none" do %>
     <div class="card-header">
-      <strong class="card-title"><%= lottery.title %></strong>
-      <span class="badge bg-success float-end">
-        <%= lottery.user.email_address %>
+      <strong class="card-title">
+        <%= lottery.title %>
+      </strong>
+    </div>
+  <% end %>
+  <div class="card-body">
+    <span class="badge bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill">
+      <%= Lottery.priorities[lottery.priority] %>
+    </span>
+    <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">
+      <%= Lottery.statuses[lottery.status] %>
+    </span>
+    <hr />
+    <p class="text-muted mb-1">目标产品：火箭队礼盒</p>
+    <small class="text-muted mb-0 d-flex justify-content-end">
+      <a href="<%= lottery.target_url %>" class="text-decoration-none" target="_blank" title="<%= lottery.target_url %>">
+        宝站信息连接 <i class="bi bi-box-arrow-up-right"></i>
+      </a>
+    </small>
+    <hr />
+    <small class="text-muted">执行人：<%= lottery.owner.email_address %></small>
+    <br />
+    <small class="text-muted">创建人：<%= lottery.user.email_address %></small>
+    <hr />
+    <small class="text-muted">中国·北京时间 +0800</small>
+    <p class="fs-8 text-muted my-2">
+      <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+        起：<%= lottery.started_at.strftime('%Y-%m-%d %H:%M:%S') %>
       </span>
-    </div>
-    <div class="card-body">
-      <p class="fs-8 text-muted mb-1">
-        <%= lottery.started_at %> - <%= lottery.ended_at %>
+      -
+      <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+        止：<%= lottery.ended_at.strftime('%Y-%m-%d %H:%M:%S') %>
+      </span>
+    </p>
+    <small class="text-muted mb-1">日本·东京时间 +0900</small>
+    <p class="fs-8 text-muted my-2">
+      <span class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+        起：<%= lottery.started_at.in_time_zone('Tokyo').strftime('%Y-%m-%d %H:%M:%S') %>
+      </span>
+      -
+      <span class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+        止：<%= lottery.ended_at.utc.in_time_zone('Tokyo').strftime('%Y-%m-%d %H:%M:%S') %>
+      </span>
+    </p>
+    <hr />
+    <small class="text-muted">执行作战室信息</small>
+    <br />
+    <% if lottery.meeting_url.present? || lottery.meeting_code.present? %>
+      <p class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill my-2">
+        <i class="bi bi-wechat me-2"></i>
+        <%= lottery.meeting_code %>
       </p>
-      <p class="fs-8 text-muted mb-0"><%= lottery.target_url %></p> 
-    </div>
-  <% end%>
+      <p class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill mb-0">
+        <i class="bi bi-link me-2"></i>
+        <%= lottery.meeting_url %>
+      </p>
+    <% else %>
+      <p class="badge bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill my-2">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        暂无会议信息
+      </p><br />
+      <p class="badge bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill mb-0">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        如有疑问，请联系执行人。
+      </p>
+    <% end %>
+  </div>
+  
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to edit_lottery_path(lottery), class: "btn btn-sm btn-outline-primary" do %>
-      <i class="bi bi-pencil-square"></i>
+    <% unless controller_name == "lotteries" && action_name == "show" %>
+    <%= link_to lottery_path(lottery), class: "btn btn-sm btn-outline-primary" do %>
+      <i class="bi bi-eye"></i> 进入详细
+    <% end %>
+    <% end %>
+    <%= link_to edit_lottery_path(lottery), class: "ms-3 btn btn-sm btn-outline-primary" do %>
+      <i class="bi bi-pencil-square"></i> 编辑
     <% end %>
     <%= link_to lottery_path(lottery), class: "ms-3 btn btn-sm btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "确定删除吗？" } do %>
-      <i class="bi bi-trash"></i>
+      <i class="bi bi-trash"></i> 删除
     <% end %>
   </div>
 </div>
