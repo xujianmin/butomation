@@ -65,6 +65,6 @@ class LotteriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def lottery_params
-      params.expect(lottery: [ :title, :started_at, :ended_at, :target_url, :user_id ])
+      params.expect(lottery: [ :title, :started_at, :ended_at, :target_url, :user_id, :owner_id ])
     end
 end

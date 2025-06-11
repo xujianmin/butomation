@@ -37,9 +37,19 @@
       <%= form.text_field :target_url, class: "form-control" %>
       <div id="urlHelp" class="form-text">抽签产品页面网址。如未公布请留空。</div>
     </div>
+  </div>
 
-    <div>
+  <div class="row my-3">
+    <div class="col">
+      <%= form.label :user_id, "创建者" %>
+      <%= form.text_field :user_id, value: Current.user.email_address, class: "form-control", disabled: true %>
       <%= form.hidden_field :user_id, value: Current.user.id %>
+    </div>
+    <div class="col">
+      <%= form.label :owner_id, "执行者" %>
+      <%= form.collection_select :owner_id, User.all, :id, :email_address, 
+          { selected: Current.user.id, include_blank: true }, 
+          { class: "form-select" } %>
     </div>
   </div>
   <hr />

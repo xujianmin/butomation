@@ -1,5 +1,7 @@
 <% content_for :title, "抽签计划" %>
 
+<% breadcrumb :lotteries %>
+
 <div class="row">
   <div class="col-12">
     <div class="align-items-center p-3 my-3 bg-primary-subtle rounded shadow-sm clearfix">
@@ -9,10 +11,9 @@
         新增抽签计划
       <% end %>
     </div>
-
-    <div id="lotteries">
+    <div class="row" id="lotteries">
       <% @lotteries.each do |lottery| %>
-        <div class="col-12 col-sm-6 col-md-4">
+        <div class="col-12 col-md-4 mb-3">
           <%= render lottery %>
         </div>
       <% end %>

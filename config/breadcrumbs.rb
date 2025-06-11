@@ -44,24 +44,26 @@ crumb :edit_pokermon do |pokermon|
   parent :pokermon, pokermon
 end
 
-# crumb :projects do
-#   link "Projects", projects_path
-# end
+# 抽奖相关
+crumb :lotteries do
+  link "抽奖活动", lotteries_path
+  parent :root
+end
 
-# crumb :project do |project|
-#   link project.name, project_path(project)
-#   parent :projects
-# end
+crumb :lottery do |lottery|
+  link lottery.title, lottery_path(lottery)
+  parent :lotteries
+end
 
-# crumb :project_issues do |project|
-#   link "Issues", project_issues_path(project)
-#   parent :project, project
-# end
+crumb :new_lottery do
+  link "新增抽奖", new_lottery_path
+  parent :lotteries
+end
 
-# crumb :issue do |issue|
-#   link issue.title, issue_path(issue)
-#   parent :project_issues, issue.project
-# end
+crumb :edit_lottery do |lottery|
+  link "编辑 #{lottery.title}", edit_lottery_path(lottery)
+  parent :lottery, lottery
+end
 
 # If you want to split your breadcrumbs configuration over multiple files, you
 # can create a folder named `config/breadcrumbs` and put your configuration
