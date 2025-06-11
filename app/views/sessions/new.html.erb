@@ -2,7 +2,14 @@
   <%= form_with url: session_path do |form| %>
     <h1 class="h3 mb-3 fw-normal text-center">登入 Butomation</h1>
     <div class="form-floating">
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "form-control mb-2" %>
+      <% remembered_email = cookies.signed[:remembered_email] %>
+      <% Rails.logger.debug "Remembered email in view: #{remembered_email}" %>
+      <%= form.email_field :email_address, 
+          required: true, 
+          autocomplete: "username", 
+          placeholder: "Enter your email address", 
+          value: remembered_email, 
+          class: "form-control mb-2" %>
       <label for="floatingInput">请输入邮箱地址</label>
     </div>
     <div class="form-floating">
@@ -10,7 +17,7 @@
       <label for="floatingPassword">请输入密码</label>
     </div>
     <div class="form-check text-start my-3">
-      <%= form.check_box :remember_me, class: "form-check-input", id: "checkDefault" %>
+      <%= form.check_box :remember_me, class: "form-check-input", id: "checkDefault", checked: cookies.signed[:remember_me] %>
       <label class="form-check-label" for="checkDefault">
         记住我
       </label>
