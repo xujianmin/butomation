@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :lotteries
   resource :session
   resources :passwords, param: :token
   

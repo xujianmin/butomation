@@ -1,0 +1,41 @@
+<%= form_with(model: lottery) do |form| %>
+  <% if lottery.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(lottery.errors.count, "error") %> prohibited this lottery from being saved:</h2>
+
+      <ul>
+        <% lottery.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :started_at, style: "display: block" %>
+    <%= form.datetime_field :started_at %>
+  </div>
+
+  <div>
+    <%= form.label :ended_at, style: "display: block" %>
+    <%= form.datetime_field :ended_at %>
+  </div>
+
+  <div>
+    <%= form.label :target_url, style: "display: block" %>
+    <%= form.text_field :target_url %>
+  </div>
+
+  <div>
+    <%= form.hidden_field :user_id, value: Current.user.id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

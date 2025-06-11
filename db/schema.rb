@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_10_150858) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_11_054307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "lotteries", force: :cascade do |t|
+    t.string "title"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.string "target_url"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_lotteries_on_user_id"
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -56,6 +67,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_150858) do
     t.string "domain"
   end
 
+  add_foreign_key "lotteries", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "sites_pokermons", "virtual_users"
 end

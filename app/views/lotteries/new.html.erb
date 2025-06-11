@@ -1,0 +1,11 @@
+<% content_for :title, "New lottery" %>
+
+<h1>New lottery</h1>
+
+<%= render "form", lottery: @lottery %>
+
+<br>
+
+<div>
+  <%= link_to "Back to lotteries", lotteries_path %>
+</div>
