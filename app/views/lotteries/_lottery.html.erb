@@ -1,27 +1,26 @@
-<div id="<%= dom_id lottery %>">
-  <p>
-    <strong>Title:</strong>
-    <%= lottery.title %>
-  </p>
-
-  <p>
-    <strong>Started at:</strong>
-    <%= lottery.started_at %>
-  </p>
-
-  <p>
-    <strong>Ended at:</strong>
-    <%= lottery.ended_at %>
-  </p>
-
-  <p>
-    <strong>Target url:</strong>
-    <%= lottery.target_url %>
-  </p>
-
-  <p>
-    <strong>User:</strong>
-    <%= lottery.user_id %>
-  </p>
-
+<div class="card" id="<%= dom_id(lottery) %>">
+  <%= link_to lottery, class: "text-decoration-none" do %>
+    <div class="card-header">
+      <strong class="card-title"><%= lottery.title %></strong>
+      <span class="badge bg-success float-end">
+        <%= lottery.user.email_address %>
+      </span>
+    </div>
+    <div class="card-body">
+      <p class="fs-8 text-muted mb-1">
+        <%= lottery.started_at %> - <%= lottery.ended_at %>
+      </p>
+      <p class="fs-8 text-muted mb-0"><%= lottery.target_url %></p> 
+    </div>
+  <% end%>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to edit_lottery_path(lottery), class: "btn btn-sm btn-outline-primary" do %>
+      <i class="bi bi-pencil-square"></i>
+    <% end %>
+    <%= link_to lottery_path(lottery), class: "ms-3 btn btn-sm btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "确定删除吗？" } do %>
+      <i class="bi bi-trash"></i>
+    <% end %>
+  </div>
 </div>
+
+

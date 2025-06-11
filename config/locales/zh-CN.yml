@@ -10,6 +10,7 @@ zh-CN:
     models:
       virtual_user: 虚拟用户
       sites/pokermon: 宝可梦账户关联
+      lottery: 抽签计划
     attributes:
       virtual_user:
         last_name: 姓氏
@@ -26,6 +27,11 @@ zh-CN:
         registry_postcode: 注册时邮编
         registry_fandi: 注册时地址
         reg_password: 注册默认密码
+      lottery:
+        title: 摘要
+        started_at: 抽签开始时间
+        ended_at: 抽签结束时间
+        target_url: 产品目标网址
   date:
     abbr_day_names:
     - 周日

@@ -12,10 +12,9 @@
 
     <div id="lotteries">
       <% @lotteries.each do |lottery| %>
-        <%= render lottery %>
-        <p>
-          <%= link_to "Show this lottery", lottery %>
-        </p>
+        <div class="col-12 col-sm-6 col-md-4">
+          <%= render lottery %>
+        </div>
       <% end %>
     </div>
   </div>

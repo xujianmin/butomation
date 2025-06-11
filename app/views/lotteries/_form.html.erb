@@ -10,32 +10,40 @@
       </ul>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="row my-3">
+    <div class="col">
+      <%= form.label :title, class: "form-label" %>
+      <%= form.text_field :title, class: "form-control" %>
+      <div id="titleHelp" class="form-text">简要描述抽签计划，如“抽取100个宝可梦黑盒”。</div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :started_at, style: "display: block" %>
-    <%= form.datetime_field :started_at %>
+  <div class="row my-3">
+    <div class="col">
+      <%= form.label :started_at, class: "form-label" %>
+      <%= form.datetime_field :started_at, class: "form-control" %>
+    </div>
+
+    <div class="col"> 
+      <%= form.label :ended_at, class: "form-label" %>
+      <%= form.datetime_field :ended_at, class: "form-control" %>
+    </div>
+    <div id="startedAtHelp" class="form-text">注意：此处选择北京时间，东京时间由系统计算。</div>
   </div>
 
-  <div>
-    <%= form.label :ended_at, style: "display: block" %>
-    <%= form.datetime_field :ended_at %>
-  </div>
+  <div class="row my-3">
+    <div class="col">
+      <%= form.label :target_url, class: "form-label" %>
+      <%= form.text_field :target_url, class: "form-control" %>
+      <div id="urlHelp" class="form-text">抽签产品页面网址。如未公布请留空。</div>
+    </div>
 
-  <div>
-    <%= form.label :target_url, style: "display: block" %>
-    <%= form.text_field :target_url %>
+    <div>
+      <%= form.hidden_field :user_id, value: Current.user.id %>
+    </div>
   </div>
-
-  <div>
-    <%= form.hidden_field :user_id, value: Current.user.id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <hr />
+  <div class="d-grid gap-2">
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

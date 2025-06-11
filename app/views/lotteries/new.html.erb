@@ -1,11 +1,15 @@
 <% content_for :title, "New lottery" %>
 
-<h1>New lottery</h1>
+<div class="row">
+  <div class="col-12">
+    <div class="align-items-center p-3 my-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">新建抽签计划</p>
+      <%= link_to lotteries_path, class: "float-end btn btn-sm btn-primary" do %>
+        <i class="bi bi-plus"></i>
+        抽签计划一览
+      <% end %>
+    </div>
 
-<%= render "form", lottery: @lottery %>
-
-<br>
-
-<div>
-  <%= link_to "Back to lotteries", lotteries_path %>
+    <%= render "form", lottery: @lottery %>
+  </div>
 </div>
