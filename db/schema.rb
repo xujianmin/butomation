@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_11_174912) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_23_062518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -53,6 +53,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_174912) do
     t.index ["virtual_user_id"], name: "index_sites_pokermons_on_virtual_user_id"
   end
 
+  create_table "subordinations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "virtual_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "virtual_user_id"], name: "index_subordinations_on_user_id_and_virtual_user_id", unique: true
+    t.index ["user_id"], name: "index_subordinations_on_user_id"
+    t.index ["virtual_user_id"], name: "index_subordinations_on_virtual_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
@@ -77,4 +87,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_174912) do
   add_foreign_key "lotteries", "users", column: "owner_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "sites_pokermons", "virtual_users"
+  add_foreign_key "subordinations", "users"
+  add_foreign_key "subordinations", "virtual_users"
 end

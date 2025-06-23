@@ -34,6 +34,10 @@ class VirtualUser < ApplicationRecord
   # 模型关联
   has_one :pokermon, class_name: "Sites::Pokermon", dependent: :destroy
 
+  # 与User的多对多关联
+  has_many :subordinations, dependent: :destroy
+  has_many :users, through: :subordinations
+
   enum :civ_style, {
     china: "中国",
     japan: "日本",
@@ -84,6 +88,26 @@ class VirtualUser < ApplicationRecord
     return nil unless birthdate
     now = Time.current.to_date
     now.year - birthdate.year - (birthdate.change(year: now.year) > now ? 1 : 0)
+  end
+
+  # 分配给用户
+  def assign_to_user(user)
+    users << user unless users.include?(user)
+  end
+
+  # 从用户移除
+  def remove_from_user(user)
+    users.delete(user)
+  end
+
+  # 检查是否被某个用户管理
+  def managed_by_user?(user)
+    users.include?(user)
+  end
+
+  # 获取主要管理者（第一个分配的用户）
+  def primary_manager
+    users.first
   end
 
   def generate_random_birthdate
