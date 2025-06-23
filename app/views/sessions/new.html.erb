@@ -8,7 +8,7 @@
   <% end %>
   
   <%= form_with url: session_path do |form| %>
-    <h1 class="h3 mb-3 fw-normal text-center">B-uto-mation</h1>
+    <h1 class="h3 mb-3 fw-normal text-center">B-uto-Mation</h1>
     <div class="form-floating">
       <% remembered_email = cookies.signed[:remembered_email] %>
       <% Rails.logger.debug "Remembered email in view: #{remembered_email}" %>
@@ -30,8 +30,10 @@
         记住我
       </label>
     </div>
-    <%= form.submit "登入系统", class: "btn btn-primary w-100 py-2" %>
+    <%= form.submit "登入系统", class: "btn btn-lg btn-primary w-100 py-2" %>
   <% end %>
   <br />
+  <!--
   <%= link_to "忘记密码?", new_password_path, class: "text-decoration-none" %>
+  -->
 </div>
