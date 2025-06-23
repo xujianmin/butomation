@@ -3,45 +3,16 @@
 <% content_for :title, "用户详情" %>
 
 <div class="row mt-3">
-  <div class="col-12 col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-header">
-        <h3>用户详情</h3>
-      </div>
-      <div class="card-body">
-        <dl class="row">
-          <dt class="col-sm-4">邮箱地址</dt>
-          <dd class="col-sm-8"><%= @user.email_address %></dd>
-          
-          <dt class="col-sm-4">用户角色</dt>
-          <dd class="col-sm-8">
-            <span class="badge bg-<%= @user.role == 'root' ? 'danger' : 'secondary' %>">
-              <%= @user.role_text %>
-            </span>
-          </dd>
-          
-          <dt class="col-sm-4">管理的虚拟用户</dt>
-          <dd class="col-sm-8"><%= @user.virtual_users.count %> 个</dd>
-          
-          <dt class="col-sm-4">创建时间</dt>
-          <dd class="col-sm-8"><%= @user.created_at.strftime('%Y-%m-%d %H:%M:%S') %></dd>
-          
-          <dt class="col-sm-4">最后更新</dt>
-          <dd class="col-sm-8"><%= @user.updated_at.strftime('%Y-%m-%d %H:%M:%S') %></dd>
-        </dl>
-        
-        <div class="d-flex gap-2">
-          <% if Current.user.can_promote_to?('root') %>
-            <%= link_to edit_user_path(@user), class: "btn btn-warning" do %>
-              <i class="bi bi-pencil"></i> 编辑用户
-            <% end %>
-          <% end %>
-          
-          <%= link_to users_path, class: "btn btn-secondary" do %>
-            <i class="bi bi-arrow-left"></i> 返回用户列表
-          <% end %>
-        </div>
+  <div class="col-12 col-sm-9">
+    <div class="align-items-center p-3 mb-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">普通系统用户详情</p>
+      <div class="d-flex gap-2 float-end">
+        <%= link_to "一览", users_path, class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "编辑", edit_user_path(@user), class: "btn btn-sm btn-primary" %>
+        <%= button_to "删除", @user, method: :delete, class: "btn btn-sm btn-danger", data: { turbo_confirm: "确认删除？" } %>
       </div>
     </div>
+
+    <%= render @user %>
   </div>
 </div>

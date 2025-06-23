@@ -3,11 +3,15 @@
 <% content_for :title, "新建用户" %>
 
 <div class="row mt-3">
-  <div class="col-12">
+  <div class="col-12 col-sm-9">
+    <div class="align-items-center p-3 my-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">新增系统用户</p>
+      <%= link_to users_path, class: "float-end btn btn-sm btn-primary" do %>
+        <i class="bi bi-people-fill"></i>
+        系统用户一览
+      <% end %>
+    </div>
     <div class="card">
-      <div class="card-header">
-        <h3>新建用户</h3>
-      </div>
       <div class="card-body">
         <%= render 'form' %>
       </div>

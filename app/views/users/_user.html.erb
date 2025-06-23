@@ -1,0 +1,23 @@
+<div class="card" id="<%= dom_id(user) %>">
+  <%= link_to user, class: "text-decoration-none" do %>
+    <div class="card-header">
+      <strong class="card-title"><%= user.email_address %></strong>
+      <span class="badge bg-<%= user.role == 'root' ? 'danger' : 'success'%>-subtle border border-<%= user.role == 'root' ? 'danger' : 'success'%>-subtle text-primary-emphasis rounded-pill float-end">
+        <%= user.role_text %>
+      </span>
+    </div>
+    <div class="card-body">
+      <p class="fs-8 text-muted mb-0"><%= user.email_address %></p> 
+    </div>
+  <% end%>
+  <div class="card-footer d-flex justify-content-end">
+    <% unless user.role == "root" %>
+      <%= link_to edit_user_path(user), class: "btn btn-sm btn-outline-primary" do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+      <%= link_to user_path(user), class: "ms-3 btn btn-sm btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "确定删除吗？" } do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    <% end %>
+  </div>
+</div>

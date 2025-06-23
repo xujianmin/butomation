@@ -3,17 +3,18 @@
 <% content_for :title, "编辑用户" %>
 
 <div class="row mt-3">
-  <div class="col-12 col-md-8 col-lg-6">
+  <div class="col-12 col-sm-9">
+    <div class="align-items-center p-3 my-3 bg-primary-subtle rounded shadow-sm clearfix">
+      <p class="h5 mb-0 float-start text-primary-emphasis">编辑系统用户</p>
+      <%= link_to user_path(@user), class: "float-end btn btn-sm btn-primary" do %>
+        <i class="bi bi-person-circle"></i>
+        虚拟用户详情
+      <% end %>
+    </div>
     <div class="card">
-      <div class="card-header">
-        <h3>编辑用户</h3>
-      </div>
       <div class="card-body">
         <%= render 'form', 
-            editing: true,
-            submit_text: "更新用户",
-            cancel_text: "取消",
-            cancel_path: user_path(@user) %>
+            editing: true %>
       </div>
     </div>
   </div>

@@ -13,6 +13,10 @@ class User < ApplicationRecord
     "root" => "超级管理员"
   }
 
+  # Scope 定义
+  scope :regular_users, -> { where(role: "user") }
+  scope :super_admins, -> { where(role: "root") }
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   # 手动添加角色检查方法
