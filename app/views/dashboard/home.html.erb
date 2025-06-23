@@ -2,8 +2,77 @@
 
 <% content_for :title, "首页" %>
 
+<% if Current.user.root? %>
 <div class="row mt-3">
-  <div class="col-12 col-sm-6 col-md-4 mb-3">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        超级管理员数据
+      </div>
+      <div class="card-body row g-3">
+        <div class="col-6 col-sm-6 col-md-2">
+          <div class="card">
+            <%= link_to virtual_users_path, class: "text-decoration-none" do %>
+            <div class="card-body">
+              <small class="text-muted">全部虚拟用户</small>
+              <p class="card-text text-center fs-1"><%= VirtualUser.count %></p>
+            </div>
+            <% end %>
+            <div class="card-footer">
+              <%= link_to "新建", new_virtual_user_path, class: "btn btn-primary btn-sm float-end" %>
+              <%= link_to "一览", virtual_users_path, class: "btn btn-info btn-sm float-end me-2" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-2">
+          <div class="card">
+            <%= link_to lotteries_path, class: "text-decoration-none" do %>
+            <div class="card-body">
+              <small class="text-muted">全部计划数</small>
+              <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+            </div>
+            <% end%>
+            <div class="card-footer">
+              <%= link_to "新建", new_lottery_path, class: "btn btn-primary btn-sm float-end" %>
+              <%= link_to "一览", lotteries_path, class: "btn btn-primary btn-sm float-end me-2" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <small class="text-muted">已完成计划数</small>
+              <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+              <%= link_to "创建", "#", class: "btn btn-primary btn-sm float-end" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <small class="text-muted">待执行计划数</small>
+              <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+              <%= link_to "创建", "#", class: "btn btn-primary btn-sm float-end" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <small class="text-muted">超级优先计划数</small>
+              <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+              <%= link_to "创建", "#", class: "btn btn-primary btn-sm float-end" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="row mt-3 g-3">
+  <div class="col-12 col-sm-6 col-md-4">
     <div class="card">
       <div class="card-body">
         <small class="text-muted"><%= chinese_date_with_weekday %></small>
@@ -14,12 +83,12 @@
       </div>
     </div>
   </div>
-  <div class="col-6 col-sm-6 col-md-2 mb-3">
+  <div class="col-6 col-sm-6 col-md-2">
     <div class="card">
       <%= link_to virtual_users_path, class: "text-decoration-none" do %>
       <div class="card-body">
         <small class="text-muted">管理的虚拟用户</small>
-        <p class="card-text text-center fs-1"><%= VirtualUser.count %></p>
+        <p class="card-text text-center fs-1"><%= Current.user.virtual_users.count %></p>
       </div>
       <% end %>
       <div class="card-footer">
@@ -33,7 +102,7 @@
       <%= link_to lotteries_path, class: "text-decoration-none" do %>
       <div class="card-body">
         <small class="text-muted">当前计划数</small>
-        <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+        <p class="card-text text-center fs-1"><%= Current.user.lotteries.count %></p>
       </div>
       <% end%>
       <div class="card-footer">
@@ -42,7 +111,7 @@
       </div>
     </div>
   </div>
-  <div class="col-6 col-sm-6 col-md-2 mb-3">
+  <div class="col-6 col-sm-6 col-md-2">
     <div class="card">
       <div class="card-body">
         <small class="text-muted">当前计划数</small>
@@ -51,7 +120,7 @@
       </div>
     </div>
   </div>
-  <div class="col-6 col-sm-6 col-md-2 mb-3">
+  <div class="col-6 col-sm-6 col-md-2">
     <div class="card">
       <div class="card-body">
         <small class="text-muted">当前计划数</small>
@@ -60,4 +129,5 @@
       </div>
     </div>
   </div>
-</div>  
+</div>
+
