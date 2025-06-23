@@ -34,6 +34,11 @@ crumb :user do |user|
   parent :users
 end
 
+crumb :new_user do
+  link "新建用户", new_user_path
+  parent :users
+end
+
 crumb :edit_user do |user|
   link "编辑 #{user.email_address}", edit_user_path(user)
   parent :user, user

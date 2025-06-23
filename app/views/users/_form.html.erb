@@ -1,0 +1,80 @@
+<%= form_with model: @user, local: true do |form| %>
+  <% if @user.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h4>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :email_address, "邮箱地址", class: "form-label" %>
+    <% if local_assigns[:editing] %>
+      <input type="email" class="form-control" value="<%= @user.email_address %>" readonly>
+      <div class="form-text">邮箱地址不可修改</div>
+    <% else %>
+      <%= form.email_field :email_address, class: "form-control", required: true %>
+      <div class="form-text">用户将使用此邮箱地址登录系统</div>
+    <% end %>
+  </div>
+
+  <% unless local_assigns[:editing] %>
+    <div class="mb-3">
+      <%= form.label :password, "密码", class: "form-label" %>
+      <%= form.password_field :password, class: "form-control", required: true %>
+      <div class="form-text">密码至少需要6个字符</div>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :password_confirmation, "确认密码", class: "form-label" %>
+      <%= form.password_field :password_confirmation, class: "form-control", required: true %>
+      <div class="form-text">请再次输入密码以确认</div>
+    </div>
+
+    <div class="mb-3">
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i>
+        新创建的用户将自动设置为普通用户角色
+      </div>
+    </div>
+  <% end %>
+
+  <% if local_assigns[:editing] %>
+    <div class="mb-3">
+      <%= form.label :role, "用户角色", class: "form-label" %>
+      <% 
+        # 确定可选择的角色选项
+        role_options = [['普通用户', 'user']]
+        
+        # 只有当前用户是root且目标用户不是唯一的root用户时，才允许设置为root
+        if Current.user.role_root? && 
+           (@user.role_root? || User.where(role: 'root').count > 1)
+          role_options << ['超级管理员', 'root']
+        end
+      %>
+      
+      <%= form.select :role, 
+          options_for_select(role_options, @user.role),
+          {},
+          { class: "form-select" } %>
+      <div class="form-text">
+        <% if @user.role_root? && User.where(role: 'root').count <= 1 %>
+          <span class="text-warning">
+            <i class="bi bi-exclamation-triangle"></i>
+            这是唯一的超级管理员，无法降级为普通用户
+          </span>
+        <% else %>
+          请谨慎修改用户角色，超级管理员拥有所有权限
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="d-flex gap-2">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "取消", users_path, class: "btn btn-secondary" %>
+  </div>
+<% end %> 
