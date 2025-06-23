@@ -13,7 +13,9 @@
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">虚拟用户</a>
           <ul class="dropdown-menu">
             <li><%= link_to "虚拟用户一览", virtual_users_path, class: "dropdown-item" %></li>
-            <li><%= link_to "自动新建", new_virtual_user_path, class: "dropdown-item" %></li>
+            <% if Current.user&.can_manage_virtual_users? %>
+              <li><%= link_to "自动新建", new_virtual_user_path, class: "dropdown-item" %></li>
+            <% end %>
             <li><hr class="dropdown-divider"></li>
             <li>
               <%= link_to "Pokermon", sites_pokermons_path, class: "dropdown-item" %>
@@ -27,14 +29,17 @@
         <li class="nav-item">
           <a class="nav-link" href="#">统计报表</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">设置</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
+        <% if Current.user&.can_view_users? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">管理</a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "用户管理", users_path, class: "dropdown-item" %></li>
+              <% if Current.user&.can_manage_system? %>
+                <li><a class="dropdown-item" href="#">系统设置</a></li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
       </ul>
       <!--
       <form class="d-flex" role="search">
@@ -42,8 +47,13 @@
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
       -->
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
         <% if Current.user %>
+          <span class="navbar-text me-3">
+            <small class="text-light">
+              <%= Current.user.role_text %> | <%= Current.user.email_address %>
+            </small>
+          </span>
           <%= button_to "退出", session_path, method: :delete, class: "btn btn-outline-light" %>
         <% end %>
       </div>

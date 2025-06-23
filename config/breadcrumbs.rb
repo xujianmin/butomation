@@ -23,6 +23,22 @@ crumb :edit_virtual_user do |virtual_user|
   parent :virtual_user, virtual_user
 end
 
+# 用户相关
+crumb :users do
+  link "用户管理", users_path
+  parent :root
+end
+
+crumb :user do |user|
+  link user.email_address, user_path(user)
+  parent :users
+end
+
+crumb :edit_user do |user|
+  link "编辑 #{user.email_address}", edit_user_path(user)
+  parent :user, user
+end
+
 # 宝可梦相关
 crumb :pokermons do
   link "宝可梦", sites_pokermons_path

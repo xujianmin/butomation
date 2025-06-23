@@ -12,6 +12,7 @@ zh-CN:
       sites/pokermon: 宝可梦账户关联
       lottery: 抽签计划
       subordination: 用户虚拟用户关联
+      user: 用户
     attributes:
       virtual_user:
         last_name: 姓氏
@@ -36,6 +37,9 @@ zh-CN:
       subordination:
         user: 用户
         virtual_user: 虚拟用户
+      user:
+        email_address: 邮箱地址
+        role: 角色
   date:
     abbr_day_names:
     - 周日

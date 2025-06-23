@@ -1,0 +1,41 @@
+<% breadcrumb :edit_user, @user %>
+
+<% content_for :title, "编辑用户" %>
+
+<div class="row mt-3">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h3>编辑用户</h3>
+      </div>
+      <div class="card-body">
+        <%= form_with model: @user, local: true do |form| %>
+          <div class="mb-3">
+            <label class="form-label">邮箱地址</label>
+            <input type="email" class="form-control" value="<%= @user.email_address %>" readonly>
+            <div class="form-text">邮箱地址不可修改</div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :role, "用户角色", class: "form-label" %>
+            <%= form.select :role, 
+                options_for_select([
+                  ['普通用户', 'user'],
+                  ['超级管理员', 'root']
+                ], @user.role),
+                {},
+                { class: "form-select" } %>
+            <div class="form-text">
+              请谨慎修改用户角色，超级管理员拥有所有权限
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= form.submit "更新用户", class: "btn btn-primary" %>
+            <%= link_to "取消", user_path(@user), class: "btn btn-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div> 

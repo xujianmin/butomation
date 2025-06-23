@@ -1,0 +1,48 @@
+<% breadcrumb :users %>
+
+<% content_for :title, "用户管理" %>
+
+<div class="row mt-3">
+  <div class="col-12">
+    <h2>用户管理</h2>
+    
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>邮箱</th>
+            <th>角色</th>
+            <th>管理的虚拟用户</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.email_address %></td>
+              <td>
+                <span class="badge bg-<%= user.role == 'root' ? 'danger' : 'secondary' %>">
+                  <%= user.role_text %>
+                </span>
+              </td>
+              <td><%= user.virtual_users.count %> 个</td>
+              <td><%= user.created_at.strftime('%Y-%m-%d %H:%M') %></td>
+              <td>
+                <%= link_to user_path(user), class: "btn btn-sm btn-outline-primary" do %>
+                  <i class="bi bi-eye"></i> 查看
+                <% end %>
+                
+                <% if Current.user.can_promote_to?('root') %>
+                  <%= link_to edit_user_path(user), class: "btn btn-sm btn-outline-warning" do %>
+                    <i class="bi bi-pencil"></i> 编辑
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

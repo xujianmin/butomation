@@ -8,8 +8,12 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-# 创建默认管理员用户
+# 创建默认超级管理员用户
 User.find_or_create_by!(email_address: "admin@usingnow.tech") do |user|
   user.password = "password"
   user.password_confirmation = "password"
+  user.role = "root"
 end
+
+# 为现有用户设置默认角色（如果没有设置的话）
+User.where(role: nil).update_all(role: "user")

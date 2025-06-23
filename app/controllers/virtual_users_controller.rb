@@ -2,24 +2,13 @@ class VirtualUsersController < ApplicationController
   include Filterable
 
   before_action :set_virtual_user, only: %i[ show edit update destroy ]
+  before_action :require_virtual_user_access, only: %i[ show edit update destroy ]
 
   # GET /virtual_users or /virtual_users.json
   def index
-    # @virtual_users = VirtualUser.all
-    # if search_params.present?
-    #   @virtual_users = VirtualUser.includes(:pokermon)
-    #   # @virtual_users = @virtual_users.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", "%#{search_params[:query]}%", "%#{search_params[:query]}%", "%#{search_params[:query]}%") if search_params[:query].present?
-    #   @virtual_users = @virtual_users.text_search(search_params[:query]) if search_params[:query].present?
-
-    #   if search_params[:sort].present?
-    #     sort = search_params[:sort].split("-")
-    #     @virtual_users = @virtual_users.order("#{sort[0]} #{sort[1]}")
-    #   end
-    # else
-    #   @virtual_users = VirtualUser.includes(:pokermon).all
-    # end
-
-    @virtual_users = filter!(VirtualUser)
+    # 根据用户角色过滤虚拟用户
+    base_query = Current.user.manageable_virtual_users
+    @virtual_users = filter!(VirtualUser, base_query)
   end
 
   # GET /virtual_users/1 or /virtual_users/1.json
@@ -42,7 +31,10 @@ class VirtualUsersController < ApplicationController
 
     respond_to do |format|
       if @virtual_user.save
-        format.html { redirect_to @virtual_user, notice: "Virtual user was successfully created." }
+        # 自动分配给当前用户
+        Current.user.assign_virtual_user(@virtual_user)
+
+        format.html { redirect_to @virtual_user, notice: "虚拟用户创建成功" }
         format.json { render :show, status: :created, location: @virtual_user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -55,7 +47,7 @@ class VirtualUsersController < ApplicationController
   def update
     respond_to do |format|
       if @virtual_user.update(virtual_user_params)
-        format.html { redirect_to @virtual_user, notice: "Virtual user was successfully updated." }
+        format.html { redirect_to @virtual_user, notice: "虚拟用户更新成功" }
         format.json { render :show, status: :ok, location: @virtual_user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -69,7 +61,7 @@ class VirtualUsersController < ApplicationController
     @virtual_user.destroy!
 
     respond_to do |format|
-      format.html { redirect_to virtual_users_path, status: :see_other, notice: "Virtual user was successfully destroyed." }
+      format.html { redirect_to virtual_users_path, status: :see_other, notice: "虚拟用户删除成功" }
       format.json { head :no_content }
     end
   end
@@ -78,6 +70,13 @@ class VirtualUsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_virtual_user
       @virtual_user = VirtualUser.find(params.expect(:id))
+    end
+
+    # 权限检查方法
+    def require_virtual_user_access
+      unless Current.user&.can_manage_own_virtual_user?(@virtual_user)
+        redirect_to virtual_users_path, alert: "您没有权限访问此虚拟用户"
+      end
     end
 
     # Only allow a list of trusted parameters through.
