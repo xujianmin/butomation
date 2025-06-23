@@ -1,6 +1,14 @@
 <div class="m-auto mt-5" style="max-width: 330px; padding: 1rem;">
+  <% if params[:expired] %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle"></i>
+      会话已过期，请重新登入
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+  
   <%= form_with url: session_path do |form| %>
-    <h1 class="h3 mb-3 fw-normal text-center">登入 Butomation</h1>
+    <h1 class="h3 mb-3 fw-normal text-center">B-uto-mation</h1>
     <div class="form-floating">
       <% remembered_email = cookies.signed[:remembered_email] %>
       <% Rails.logger.debug "Remembered email in view: #{remembered_email}" %>

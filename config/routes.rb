@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   resources :users, only: [ :index, :show, :new, :create, :edit, :update ]
 
   resources :lotteries
-  resource :session
+  resource :session do
+    member do
+      post :heartbeat
+    end
+  end
   resources :passwords, param: :token
 
   resources :virtual_users do

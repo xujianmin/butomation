@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     if user = User.authenticate_by(session_params.slice(:email_address, :password))
       start_new_session_for user
-      session[:expires_at] = 15.minutes.from_now
+      session[:expires_at] = 5.minutes.from_now
 
       if session_params[:remember_me]
         cookies.signed[:remembered_email] = {
@@ -41,6 +41,16 @@ class SessionsController < ApplicationController
   def destroy
     terminate_session
     redirect_to new_session_path, notice: "已退出登入"
+  end
+
+  # 心跳请求 - 更新会话过期时间
+  def heartbeat
+    if Current.user
+      session[:expires_at] = 5.minutes.from_now
+      head :ok
+    else
+      head :unauthorized
+    end
   end
 
   private

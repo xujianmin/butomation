@@ -22,7 +22,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body class="bg-body-tertiary">
+  <body class="bg-body-tertiary" data-controller="session-timeout">
     <%= render "layouts/top_nav" %>
     <%= render "layouts/top_secardary_nav" %>
     <%= render "shared/toast" if notice || alert %>
