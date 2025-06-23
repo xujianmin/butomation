@@ -3,39 +3,60 @@
 <% breadcrumb :root %>
 
 <div class="row mt-3">
-  <div class="col-12 col-sm-6 col-md-3 mb-3">
+  <div class="col-12 col-sm-6 col-md-4 mb-3">
     <div class="card">
       <div class="card-body">
-        <small class="text-muted">虚拟用户</small>
-        <p class="card-text text-center fs-1"><%= VirtualUser.count %></p>
-        <%= link_to "一览", virtual_users_path, class: "btn btn-primary btn-sm float-end" %>
+        <small class="text-muted"><%= chinese_date_with_weekday %></small>
+        <p class="card-text text-center fs-1 text-truncate"><%= Current.user.email_address %></p>
+      </div>
+      <div class="card-footer">
+        <%= link_to "补充用户信息", "#", class: "btn btn-primary btn-sm float-end" %>
       </div>
     </div>
   </div>
-  <div class="col-12 col-sm-6 col-md-3">
+  <div class="col-6 col-sm-6 col-md-2 mb-3">
+    <div class="card">
+      <%= link_to virtual_users_path, class: "text-decoration-none" do %>
+      <div class="card-body">
+        <small class="text-muted">管理的虚拟用户</small>
+        <p class="card-text text-center fs-1"><%= VirtualUser.count %></p>
+      </div>
+      <% end %>
+      <div class="card-footer">
+        <%= link_to "新建", new_virtual_user_path, class: "btn btn-primary btn-sm float-end" %>
+        <%= link_to "一览", virtual_users_path, class: "btn btn-info btn-sm float-end me-2" %>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 col-md-2">
+    <div class="card">
+      <%= link_to lotteries_path, class: "text-decoration-none" do %>
+      <div class="card-body">
+        <small class="text-muted">当前计划数</small>
+        <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+      </div>
+      <% end%>
+      <div class="card-footer">
+        <%= link_to "新建", new_lottery_path, class: "btn btn-primary btn-sm float-end" %>
+        <%= link_to "一览", lotteries_path, class: "btn btn-primary btn-sm float-end me-2" %>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 col-md-2 mb-3">
     <div class="card">
       <div class="card-body">
         <small class="text-muted">当前计划数</small>
-        <p class="card-text text-center fs-1">999</p>
+        <p class="card-text text-center fs-1"><%= Lottery.count %></p>
         <%= link_to "创建", "#", class: "btn btn-primary btn-sm float-end" %>
       </div>
     </div>
   </div>
-  <div class="col-12 col-sm-6 col-md-3">
+  <div class="col-6 col-sm-6 col-md-2 mb-3">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <small class="text-muted">当前计划数</small>
+        <p class="card-text text-center fs-1"><%= Lottery.count %></p>
+        <%= link_to "创建", "#", class: "btn btn-primary btn-sm float-end" %>
       </div>
     </div>
   </div>
