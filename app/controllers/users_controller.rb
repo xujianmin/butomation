@@ -40,6 +40,11 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
+        # 如果有角色更新请求，单独处理
+        if params[:user][:role].present? && Current.user.role_root?
+          update_user_role(params[:user][:role])
+        end
+
         format.html { redirect_to @user, notice: "用户更新成功" }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -88,6 +93,21 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:email_address, :password, :password_confirmation, :role)
+      params.require(:user).permit(:email_address, :password, :password_confirmation)
+    end
+
+    def update_user_role(new_role)
+      # 只有root用户可以更新角色
+      return unless Current.user.role_root?
+
+      # 检查是否可以提升到root角色
+      return unless Current.user.can_promote_to?(new_role)
+
+      # 检查是否可以降级用户
+      if new_role == "user" && @user.role_root?
+        return unless Current.user.can_demote_user?(@user)
+      end
+
+      @user.update_column(:role, new_role)
     end
 end
