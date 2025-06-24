@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :users, only: [ :index, :show, :new, :create, :edit, :update ]
+  resources :users, only: [ :index, :show, :new, :create, :edit, :update ] do
+    member do
+      get :assign_virtual_users
+      patch :assign_virtual_users, action: :assign_virtual_users_post
+    end
+  end
 
   resources :lotteries
   resource :session do

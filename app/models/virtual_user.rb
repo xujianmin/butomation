@@ -11,10 +11,11 @@ class VirtualUser < ApplicationRecord
     }
 
   # 搜索相关
-  FILTERS_PARAMS = %i[query sort].freeze
+  FILTERS_PARAMS = %i[query sort civ_style].freeze
 
   scope :search, ->(query) { query.present? ? text_search(query) : all }
   scope :sorted, ->(selection) { selection.present? ? apply_sort(selection) : all }
+  scope :by_civ_style, ->(civ_style) { civ_style.present? ? where(civ_style: civ_style) : all }
 
   def self.apply_sort(selection)
     sort, direction = selection.split("-")
@@ -25,6 +26,7 @@ class VirtualUser < ApplicationRecord
     includes(:pokermon)
       .search(filters["query"])
       .sorted(filters["sort"])
+      .by_civ_style(filters["civ_style"])
   end
 
   # 校验数据
@@ -78,6 +80,10 @@ class VirtualUser < ApplicationRecord
     else
       "#{first_name} #{last_name}"
     end
+  end
+
+  def civ_style_text
+    self.class.civ_styles[civ_style]
   end
 
   def email_address

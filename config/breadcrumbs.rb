@@ -44,6 +44,11 @@ crumb :edit_user do |user|
   parent :user, user
 end
 
+crumb :assign_virtual_users do |user|
+  link "分配虚拟用户", assign_virtual_users_user_path(user)
+  parent :user, user
+end
+
 # 宝可梦相关
 crumb :pokermons do
   link "宝可梦", sites_pokermons_path

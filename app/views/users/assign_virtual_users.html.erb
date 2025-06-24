@@ -1,0 +1,220 @@
+<% breadcrumb :assign_virtual_users, @user %>
+
+<% content_for :title, "为 #{@user.email_address} 分配虚拟用户" %>
+
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <i class="bi bi-people"></i> 为 <%= @user.email_address %> 分配虚拟用户
+        </h5>
+      </div>
+      <div class="card-body">
+        <!-- 筛选器 -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="card-title mb-0">筛选未分配的虚拟用户</h6>
+              </div>
+              <div class="card-body">
+                <%= form_with url: assign_virtual_users_user_path(@user), method: :get, local: true, data: { turbo: false } do |form| %>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <%= form.label :filters_query, "搜索", class: "form-label" %>
+                      <%= form.text_field "filters[query]", value: @filters["query"], class: "form-control", placeholder: "搜索姓名、邮箱..." %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= form.label :filters_sort, "排序", class: "form-label" %>
+                      <%= form.select "filters[sort]", 
+                          options_for_select([
+                            ["创建时间 (最新)", "created_at-desc"],
+                            ["创建时间 (最早)", "created_at-asc"],
+                            ["姓名 (A-Z)", "last_name-asc"],
+                            ["姓名 (Z-A)", "last_name-desc"],
+                            ["邮箱 (A-Z)", "email-asc"],
+                            ["邮箱 (Z-A)", "email-desc"]
+                          ], @filters["sort"]),
+                          { include_blank: "默认排序" },
+                          { class: "form-select" } %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= form.label :filters_civ_style, "文化风格", class: "form-label" %>
+                      <%= form.select "filters[civ_style]", 
+                          options_for_select(VirtualUser.civ_styles.map { |k, v| [v, k] }, @filters["civ_style"]),
+                          { include_blank: "全部风格" },
+                          { class: "form-select" } %>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                      <%= form.submit "筛选", class: "btn btn-primary me-2" %>
+                      <%= link_to "重置", assign_virtual_users_user_path(@user), class: "btn btn-outline-secondary" %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 未分配的虚拟用户列表 -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="card-title mb-0">未分配的虚拟用户 (<%= @unassigned_virtual_users.total_count %>)</h6>
+                <button type="button" class="btn btn-success btn-sm" onclick="assignSelected()">
+                  <i class="bi bi-plus-circle"></i> 分配选中项
+                </button>
+              </div>
+              <div class="card-body">
+                <%= form_with url: assign_virtual_users_user_path(@user), method: :patch, local: true do |form| %>
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>
+                            <input type="checkbox" id="select-all" onchange="toggleAllCheckboxes()">
+                          </th>
+                          <th>姓名</th>
+                          <th>邮箱</th>
+                          <th>文化风格</th>
+                          <th>年龄</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @unassigned_virtual_users.each do |virtual_user| %>
+                          <tr>
+                            <td>
+                              <%= form.check_box "virtual_user_ids[]", { value: virtual_user.id, class: "virtual-user-checkbox" }, virtual_user.id, nil %>
+                            </td>
+                            <td><%= virtual_user.fullname %></td>
+                            <td><%= virtual_user.email_address %></td>
+                            <td><%= virtual_user.civ_style_text %></td>
+                            <td><%= virtual_user.age %></td>
+                            <td><%= virtual_user.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <% if @unassigned_virtual_users.any? %>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                      <div>
+                        已选择 <span id="selected-count">0</span> 项
+                      </div>
+                      <%= form.submit "分配选中项", class: "btn btn-success", id: "assign-button", disabled: true %>
+                    </div>
+                  <% else %>
+                    <div class="text-center text-muted py-4">
+                      <i class="bi bi-inbox fs-1"></i>
+                      <p class="mt-2">没有找到符合条件的未分配虚拟用户</p>
+                    </div>
+                  <% end %>
+                <% end %>
+                
+                <!-- 分页 -->
+                <% if @unassigned_virtual_users.respond_to?(:current_page) %>
+                  <div class="d-flex justify-content-center mt-3">
+                    <%= paginate @unassigned_virtual_users, param_name: 'page' %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 已分配的虚拟用户列表 -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="card-title mb-0">已分配的虚拟用户 (<%= @assigned_virtual_users.total_count %>)</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <th>文化风格</th>
+                        <th>年龄</th>
+                        <th>分配时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @assigned_virtual_users.each do |virtual_user| %>
+                        <tr>
+                          <td><%= virtual_user.fullname %></td>
+                          <td><%= virtual_user.email_address %></td>
+                          <td><%= virtual_user.civ_style_text %></td>
+                          <td><%= virtual_user.age %></td>
+                          <td><%= virtual_user.subordinations.find_by(user: @user)&.created_at&.strftime("%Y-%m-%d %H:%M") || "未知" %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- 分页 -->
+                <% if @assigned_virtual_users.respond_to?(:current_page) %>
+                  <div class="d-flex justify-content-center mt-3">
+                    <%= paginate @assigned_virtual_users, param_name: 'assigned_page' %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleAllCheckboxes() {
+  const selectAll = document.getElementById('select-all');
+  const checkboxes = document.querySelectorAll('.virtual-user-checkbox');
+  
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = selectAll.checked;
+  });
+  
+  updateSelectedCount();
+}
+
+function updateSelectedCount() {
+  const checkboxes = document.querySelectorAll('.virtual-user-checkbox:checked');
+  const selectedCount = document.getElementById('selected-count');
+  const assignButton = document.getElementById('assign-button');
+  
+  selectedCount.textContent = checkboxes.length;
+  assignButton.disabled = checkboxes.length === 0;
+}
+
+function assignSelected() {
+  const checkboxes = document.querySelectorAll('.virtual-user-checkbox:checked');
+  if (checkboxes.length === 0) {
+    alert('请选择要分配的虚拟用户');
+    return;
+  }
+  
+  // 提交表单
+  checkboxes[0].closest('form').submit();
+}
+
+// 监听复选框变化
+document.addEventListener('DOMContentLoaded', function() {
+  const checkboxes = document.querySelectorAll('.virtual-user-checkbox');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectedCount);
+  });
+  
+  updateSelectedCount();
+});
+</script> 

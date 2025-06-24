@@ -31,8 +31,8 @@ class VirtualUsersController < ApplicationController
 
     respond_to do |format|
       if @virtual_user.save
-        # 自动分配给当前用户
-        Current.user.assign_virtual_user(@virtual_user)
+        # 自动分配给当前用户。只有普通用户需要自动分配, 超级管理员生成的用户默认留空。
+        Current.user.assign_virtual_user(@virtual_user) unless Current.user.role_root?
 
         format.html { redirect_to @virtual_user, notice: "虚拟用户创建成功" }
         format.json { render :show, status: :created, location: @virtual_user }

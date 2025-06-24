@@ -14,5 +14,9 @@
     </div>
 
     <%= render @user %>
+
+    <%= @user.virtual_users.each do |vu| %>
+      <%= vu %>
+    <% end %>
   </div>
 </div>

@@ -73,3 +73,5 @@ end
 gem "pg_search", "~> 2.3"
 
 gem "gretel", "~> 5.0"
+
+gem "kaminari", "~> 1.2"

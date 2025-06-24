@@ -12,10 +12,17 @@
   <% end%>
   <div class="card-footer d-flex justify-content-end">
     <% unless user.role == "root" %>
-      <%= link_to edit_user_path(user), class: "btn btn-sm btn-outline-primary" do %>
+      <%= link_to assign_virtual_users_user_path(user), class: "ms-2 btn btn-sm btn-outline-success" do %>
+        <i class="bi bi-people"></i>
+        分配虚拟用户
+      <% end %>
+      <%= link_to user_path(user), class: "ms-2 btn btn-sm btn-outline-primary", title: "详情" do %>
+        <i class="bi bi-person"></i>
+      <% end %>
+      <%= link_to edit_user_path(user), class: "ms-2 btn btn-sm btn-outline-primary", title: "编辑" do %>
         <i class="bi bi-pencil-square"></i>
       <% end %>
-      <%= link_to user_path(user), class: "ms-3 btn btn-sm btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "确定删除吗？" } do %>
+      <%= link_to user_path(user), class: "ms-2 btn btn-sm btn-outline-danger", data: { turbo_method: :delete, turbo_confirm: "确定删除吗？" }, title: "删除" do %>
         <i class="bi bi-trash"></i>
       <% end %>
     <% end %>
