@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  allow_unauthenticated_access only: %i[ new create ]
+  allow_unauthenticated_access only: %i[ new create heartbeat ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "重试次数过多，请稍后再试！" }
 
   def new
@@ -7,8 +7,11 @@ class SessionsController < ApplicationController
 
   def create
     if user = User.authenticate_by(session_params.slice(:email_address, :password))
+      # 强制清理可能残留的重定向URL
+      session.delete(:return_to_after_authenticating)
+
       start_new_session_for user
-      session[:expires_at] = 5.minutes.from_now
+      Current.session.set_expires_at(15.minutes)
 
       if session_params[:remember_me]
         cookies.signed[:remembered_email] = {
@@ -45,11 +48,18 @@ class SessionsController < ApplicationController
 
   # 心跳请求 - 更新会话过期时间
   def heartbeat
-    if Current.user
-      session[:expires_at] = 5.minutes.from_now
-      head :ok
+    # 检查当前会话是否有效
+    if Current.session&.expired?
+      render json: { error: "Session expired" }, status: :unauthorized
+      return
+    end
+
+    # 只有未过期的会话才延长
+    if Current.user && Current.session
+      Current.session.extend_session(5.minutes)
+      render json: { status: "ok" }
     else
-      head :unauthorized
+      render json: { error: "Not authenticated" }, status: :unauthorized
     end
   end
 

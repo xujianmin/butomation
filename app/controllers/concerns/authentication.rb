@@ -8,6 +8,7 @@ module Authentication
 
   class_methods do
     def allow_unauthenticated_access(**options)
+      @skip_authentication = true
       skip_before_action :require_authentication, **options
     end
   end
@@ -26,7 +27,19 @@ module Authentication
     end
 
     def find_session_by_cookie
-      Session.find_by(id: cookies.signed[:session_id]) if cookies.signed[:session_id]
+      session = Session.find_by(id: cookies.signed[:session_id]) if cookies.signed[:session_id]
+
+      # 检查会话是否过期
+      if session&.expired?
+        # 会话已过期，清理cookie和session变量
+        cookies.delete(:session_id)
+        session.destroy
+        # 清理可能的重定向URL
+        self.session.delete(:return_to_after_authenticating)
+        return nil
+      end
+
+      session
     end
 
     def request_authentication
@@ -35,7 +48,8 @@ module Authentication
     end
 
     def after_authentication_url
-      session.delete(:return_to_after_authenticating) || root_url
+      return_url = session.delete(:return_to_after_authenticating)
+      return_url || root_url
     end
 
     def start_new_session_for(user)

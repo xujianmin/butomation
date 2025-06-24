@@ -2,8 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { 
-    timeout: { type: Number, default: 5 }, // 5分钟
-    heartbeatInterval: { type: Number, default: 1 } // 1分钟
+    timeout: { type: Number, default: 15 }, // 15分钟
+    heartbeatInterval: { type: Number, default: 15 } // 15分钟
   }
 
   connect() {
@@ -19,10 +19,18 @@ export default class extends Controller {
   // 设置用户活动监听器
   setupActivityListeners() {
     const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart', 'click']
-    events.forEach(event => {
-      document.addEventListener(event, () => {
+    
+    // 添加防抖机制，避免频繁重置
+    let resetTimeout
+    const debouncedReset = () => {
+      clearTimeout(resetTimeout)
+      resetTimeout = setTimeout(() => {
         this.resetTimer()
-      }, { passive: true })
+      }, 1000) // 1秒防抖
+    }
+    
+    events.forEach(event => {
+      document.addEventListener(event, debouncedReset, { passive: true })
     })
   }
 
@@ -64,12 +72,19 @@ export default class extends Controller {
         }
       })
       
-      if (!response.ok) {
+      if (response.status === 401) {
+        this.clearTimers()
         this.handleSessionExpired()
+        return
+      } else if (!response.ok) {
+        this.clearTimers()
+        this.handleSessionExpired()
+        return
       }
     } catch (error) {
-      // 心跳失败时也触发登出，确保安全性
+      this.clearTimers()
       this.handleSessionExpired()
+      return
     }
   }
 
@@ -86,8 +101,41 @@ export default class extends Controller {
   }
 
   // 处理会话过期
-  handleSessionExpired() {
+  async handleSessionExpired() {
     this.clearTimers()
+    
+    try {
+      // 先发送登出请求到服务器
+      const csrfToken = document.querySelector('[name="csrf-token"]')
+      if (csrfToken) {
+        await fetch('/session', {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-Token': csrfToken.content,
+            'Content-Type': 'application/json'
+          }
+        })
+      }
+    } catch (error) {
+      console.log('登出请求失败:', error)
+    }
+    
+    // 清理所有可能的会话状态
+    this.clearSessionData()
+    
+    // 跳转到登录页面，并添加expired参数
     window.location.href = '/session/new?expired=true'
+  }
+
+  // 清理会话数据
+  clearSessionData() {
+    // 清理localStorage和sessionStorage中的相关数据
+    localStorage.removeItem('session_data')
+    sessionStorage.clear()
+    
+    // 清理可能的cookies（除了httponly的）
+    document.cookie.split(";").forEach(function(c) { 
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+    });
   }
 } 

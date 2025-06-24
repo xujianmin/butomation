@@ -3,11 +3,25 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
+  before_action :check_session_expiry, if: :should_check_session_expiry?
+
   private
 
+  def should_check_session_expiry?
+    # 只在需要认证的控制器中检查会话过期
+    !self.class.instance_variable_get(:@skip_authentication)
+  end
+
   def check_session_expiry
-    if session[:expires_at] && session[:expires_at] < Time.current
-      terminate_session
+    # 直接检查cookie中的会话，而不是Current.session
+    session = Session.find_by(id: cookies.signed[:session_id]) if cookies.signed[:session_id]
+
+    if session&.expired?
+      # 会话已过期，清理cookie和数据库记录
+      cookies.delete(:session_id)
+      session.destroy
+      # 清理可能的重定向URL
+      session.delete(:return_to_after_authenticating)
       redirect_to new_session_path, alert: "会话已过期，请重新登入"
     end
   end
