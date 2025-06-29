@@ -1,11 +1,15 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
-  has_many :lotteries, dependent: :destroy
+  has_many :lotteries, dependent: :destroy  # 创建的抽签计划
 
   # 与VirtualUser的多对多关联
   has_many :subordinations, dependent: :destroy
   has_many :virtual_users, through: :subordinations
+
+  # 参与关系
+  has_many :attendances, dependent: :destroy
+  has_many :participated_lotteries, through: :attendances, source: :lottery
 
   # 角色枚举定义 - 只保留 root 和 user
   enum :role, {
@@ -115,5 +119,35 @@ class User < ApplicationRecord
   # 检查是否管理某个虚拟用户
   def manages_virtual_user?(virtual_user)
     virtual_users.include?(virtual_user)
+  end
+
+  # 参与抽签计划相关方法
+  def can_join_lottery?(lottery)
+    return false if lottery.participated_by?(self)
+    return false if lottery.status == "completed" || lottery.status == "cancelled"
+    true
+  end
+
+  def join_lottery(lottery)
+    return false unless can_join_lottery?(lottery)
+    lottery.add_participant(self)
+  end
+
+  def leave_lottery(lottery)
+    lottery.remove_participant(self)
+  end
+
+  def active_participations
+    attendances.where(status: "active")
+  end
+
+  def participated_lotteries_count
+    participated_lotteries.count
+  end
+
+  def active_participated_lotteries_count
+    participated_lotteries.joins(:attendances)
+                          .where(attendances: { user_id: id, status: "active" })
+                          .count
   end
 end

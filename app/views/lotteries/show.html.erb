@@ -3,9 +3,137 @@
 <div class="row mt-3">
   <div class="col-12 col-md-8 mb-3">
     <%= render @lottery %>
+    
+    <!-- 总共参与虚拟用户数统计卡片 -->
+    <div class="card mt-3">
+      <div class="card-header">
+        <strong class="card-title">
+          <i class="fas fa-users"></i> 虚拟用户统计
+        </strong>
+        <%= link_to "详细统计", statistics_lottery_path(@lottery), class: "btn btn-sm btn-outline-primary float-end" %>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="text-center">
+              <h3 class="text-primary"><%= @total_participating_virtual_users_count %></h3>
+              <p class="text-muted mb-0">总共参与虚拟用户数</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-center">
+              <h3 class="text-success"><%= @lottery.active_participants.count %></h3>
+              <p class="text-muted mb-0">活跃参与人数</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 虚拟用户数最多的参与者 -->
+        <% if @top_virtual_users_participants.any? %>
+          <hr>
+          <h6>虚拟用户数最多的参与者：</h6>
+          <div class="list-group list-group-flush">
+            <% @top_virtual_users_participants.each_with_index do |(email, count), index| %>
+              <div class="list-group-item d-flex justify-content-between align-items-center py-2">
+                <div>
+                  <span class="badge bg-primary me-2"><%= index + 1 %></span>
+                  <%= email %>
+                </div>
+                <span class="badge bg-success"><%= count %> 个虚拟用户</span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- 所有参与虚拟用户列表 -->
+    <div class="card mt-3">
+      <div class="card-header">
+        <strong class="card-title">
+          <i class="fas fa-list"></i> 所有参与虚拟用户 (<%= @all_participating_virtual_users.count %>)
+        </strong>
+        <div class="float-end">
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#virtualUsersList" aria-expanded="false">
+            <i class="fas fa-chevron-down"></i> 展开/收起
+          </button>
+        </div>
+      </div>
+      <div class="collapse" id="virtualUsersList">
+        <div class="card-body">
+          <% if @virtual_users_by_participant.any? %>
+            <% @virtual_users_by_participant.each_with_index do |data, index| %>
+              <div class="mb-4">
+                <h6 class="border-bottom pb-2">
+                  <span class="badge bg-primary me-2"><%= index + 1 %></span>
+                  <%= data[:participant].email_address %>
+                  <span class="badge bg-success ms-2"><%= data[:count] %> 个虚拟用户</span>
+                </h6>
+                
+                <% if data[:virtual_users].any? %>
+                  <div class="row">
+                    <% data[:virtual_users].each do |virtual_user| %>
+                      <div class="col-md-6 col-lg-4 mb-2">
+                        <div class="card border-light">
+                          <div class="card-body py-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                <strong class="text-primary"><%= virtual_user.fullname %></strong>
+                                <% if virtual_user.birthdate.present? %>
+                                  <br><small class="text-muted">生日: <%= virtual_user.birthdate.strftime('%Y-%m-%d') %></small>
+                                <% end %>
+                                <br>
+                                <small class="text-muted">ID: <%= virtual_user.email_address %></small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <p class="text-muted">该参与者暂无虚拟用户</p>
+                <% end %>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted text-center">暂无参与虚拟用户</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
+  
   <div class="col-12 col-md-4 mb-3">
     <div class="card">
+      <div class="card-header">
+        <strong class="card-title">
+          参与人列表
+        </strong>
+      </div>
+      <div class="card-body">
+        <%= link_to "添加参与人", new_lottery_attendance_path(@lottery), class: "btn btn-sm btn-primary" %>
+        <hr />
+        <% if @lottery.active_participants.any? %>
+          <% @lottery.active_participants.each do |participant| %>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <strong><%= participant.email_address %></strong>
+                <br>
+                <small class="text-muted">
+                  虚拟用户: <%= participant.virtual_users.count %> 个
+                </small>
+              </div>
+              <span class="badge bg-success">参与中</span>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted">暂无参与人</p>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="card mt-3">
       <div class="card-header">
         <strong class="card-title">
           执行作战室

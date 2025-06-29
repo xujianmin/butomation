@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "attendances/new"
+  get "attendances/create"
   resources :users, only: [ :index, :show, :new, :create, :edit, :update ] do
     member do
       get :assign_virtual_users
@@ -6,7 +8,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :lotteries
+  resources :lotteries do
+    member do
+      get :statistics
+    end
+    resources :attendances, only: [ :new, :create ]
+  end
   resource :session do
     member do
       post :heartbeat

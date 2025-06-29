@@ -21,10 +21,22 @@
       </a>
     </small>
     <hr />
-    <small class="text-muted">执行人：<%= lottery.owner.email_address %></small>
+    <small class="text-muted">参与人：<%= lottery.active_participants.map(&:email_address).join(', ') %></small>
     <br />
     <small class="text-muted">创建人：<%= lottery.user.email_address %></small>
     <hr />
+    
+    <!-- 虚拟用户统计 -->
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <small class="text-muted">活跃参与人数：</small>
+      <span class="badge bg-success"><%= lottery.active_participants.count %></span>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <small class="text-muted">总共参与虚拟用户数：</small>
+      <span class="badge bg-primary"><%= lottery.cached_total_participating_virtual_users_count %></span>
+    </div>
+    <hr />
+    
     <small class="text-muted">中国·北京时间 +0800</small>
     <p class="fs-8 text-muted my-2">
       <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">

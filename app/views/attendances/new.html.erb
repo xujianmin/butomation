@@ -1,0 +1,27 @@
+<h1>Attendances#new</h1>
+<p>Find me in app/views/attendances/new.html.erb</p>
+
+<h2>为抽签计划"<%= @lottery.title %>"添加参与人</h2>
+
+<%= form_with(model: [@lottery, @attendance]) do |form| %>
+  <div class="mb-3">
+    <%= form.label :user_ids, "选择用户（可多选）", class: "form-label" %>
+    <div class="row">
+      <% @users.each do |user| %>
+        <div class="col-md-6 mb-2">
+          <div class="form-check">
+            <%= form.check_box :user_ids, { multiple: true, class: "form-check-input" }, user.id, nil %>
+            <%= form.label "user_ids_#{user.id}", user.email_address, class: "form-check-label" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <% if @users.empty? %>
+      <p class="text-muted">所有用户都已参与此抽签计划</p>
+    <% end %>
+  </div>
+  <div class="d-grid gap-2">
+    <%= form.submit "添加参与人", class: "btn btn-primary", disabled: @users.empty? %>
+    <%= link_to "返回抽签计划", @lottery, class: "btn btn-secondary mt-2" %>
+  </div>
+<% end %>

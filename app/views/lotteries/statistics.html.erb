@@ -1,0 +1,239 @@
+<% breadcrumb :lottery, @lottery %>
+
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">
+          <i class="fas fa-chart-bar"></i> 
+          <%= @lottery.title %> - 详细统计
+        </h4>
+        <%= link_to "返回抽签计划", lottery_path(@lottery), class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+      <div class="card-body">
+        <!-- 总体统计 -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card bg-primary text-white">
+              <div class="card-body text-center">
+                <h2><%= @total_participating_virtual_users_count %></h2>
+                <p class="mb-0">总共参与虚拟用户数</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-success text-white">
+              <div class="card-body text-center">
+                <h2><%= @active_participants_count %></h2>
+                <p class="mb-0">活跃参与人数</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-info text-white">
+              <div class="card-body text-center">
+                <h2><%= @total_participating_virtual_users_count > 0 ? (@total_participating_virtual_users_count.to_f / @active_participants_count).round(1) : 0 %></h2>
+                <p class="mb-0">平均每人虚拟用户数</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-warning text-white">
+              <div class="card-body text-center">
+                <h2><%= @virtual_users_by_domain.count %></h2>
+                <p class="mb-0">涉及域名数量</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain统计 -->
+        <div class="row mb-4">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">
+                  <i class="fas fa-globe"></i> 按域名统计虚拟用户分布
+                </h5>
+              </div>
+              <div class="card-body">
+                <% if @virtual_users_domain_distribution.any? %>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>排名</th>
+                          <th>域名</th>
+                          <th>虚拟用户数</th>
+                          <th>占比</th>
+                          <th>进度条</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @virtual_users_domain_distribution.sort_by { |domain, data| -data[:count] }.each_with_index do |(domain, data), index| %>
+                          <tr>
+                            <td>
+                              <span class="badge bg-primary"><%= index + 1 %></span>
+                            </td>
+                            <td>
+                              <strong><%= VirtualUser.domains[domain] %></strong>
+                              <br>
+                              <small class="text-muted"><%= domain %></small>
+                            </td>
+                            <td><strong><%= data[:count] %></strong></td>
+                            <td><%= data[:percentage] %>%</td>
+                            <td>
+                              <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-info" 
+                                     style="width: <%= data[:percentage] %>%"
+                                     role="progressbar" 
+                                     aria-valuenow="<%= data[:percentage] %>" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                  <%= data[:percentage] %>%
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% else %>
+                  <p class="text-muted text-center">暂无域名数据</p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">域名排行榜</h5>
+              </div>
+              <div class="card-body">
+                <% if @top_domains.any? %>
+                  <div class="list-group list-group-flush">
+                    <% @top_domains.each_with_index do |domain_data, index| %>
+                      <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                          <% case index %>
+                          <% when 0 %>
+                            <span class="badge bg-warning me-2">🥇</span>
+                          <% when 1 %>
+                            <span class="badge bg-secondary me-2">🥈</span>
+                          <% when 2 %>
+                            <span class="badge bg-bronze me-2">🥉</span>
+                          <% else %>
+                            <span class="badge bg-primary me-2"><%= index + 1 %></span>
+                          <% end %>
+                          <div>
+                            <strong><%= VirtualUser.domains[domain_data.domain] %></strong>
+                            <br>
+                            <small class="text-muted"><%= domain_data.domain %></small>
+                          </div>
+                        </div>
+                        <span class="badge bg-info fs-6"><%= domain_data.count %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <p class="text-muted text-center">暂无域名数据</p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 参与者虚拟用户分布 -->
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">参与者虚拟用户分布</h5>
+              </div>
+              <div class="card-body">
+                <% if @participants_virtual_users_distribution.any? %>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>排名</th>
+                          <th>参与者邮箱</th>
+                          <th>虚拟用户数</th>
+                          <th>占比</th>
+                          <th>进度条</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% @participants_virtual_users_distribution.sort_by { |_, count| -count }.each_with_index do |(email, count), index| %>
+                          <% percentage = @total_participating_virtual_users_count > 0 ? (count.to_f / @total_participating_virtual_users_count * 100).round(1) : 0 %>
+                          <tr>
+                            <td>
+                              <span class="badge bg-primary"><%= index + 1 %></span>
+                            </td>
+                            <td><%= email %></td>
+                            <td><strong><%= count %></strong></td>
+                            <td><%= percentage %>%</td>
+                            <td>
+                              <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-success" 
+                                     style="width: <%= percentage %>%"
+                                     role="progressbar" 
+                                     aria-valuenow="<%= percentage %>" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                  <%= percentage %>%
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% else %>
+                  <p class="text-muted text-center">暂无参与者数据</p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">虚拟用户数排行榜</h5>
+              </div>
+              <div class="card-body">
+                <% if @top_virtual_users_participants.any? %>
+                  <div class="list-group list-group-flush">
+                    <% @top_virtual_users_participants.each_with_index do |(email, count), index| %>
+                      <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                          <% case index %>
+                          <% when 0 %>
+                            <span class="badge bg-warning me-2">🥇</span>
+                          <% when 1 %>
+                            <span class="badge bg-secondary me-2">🥈</span>
+                          <% when 2 %>
+                            <span class="badge bg-bronze me-2">🥉</span>
+                          <% else %>
+                            <span class="badge bg-primary me-2"><%= index + 1 %></span>
+                          <% end %>
+                          <%= email %>
+                        </div>
+                        <span class="badge bg-success fs-6"><%= count %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <p class="text-muted text-center">暂无排行榜数据</p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

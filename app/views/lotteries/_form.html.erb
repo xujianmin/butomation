@@ -69,12 +69,6 @@
       <%= form.text_field :user_id, value: Current.user.email_address, class: "form-control", disabled: true %>
       <%= form.hidden_field :user_id, value: Current.user.id %>
     </div>
-    <div class="col">
-      <%= form.label :owner_id, "执行者" %>
-      <%= form.collection_select :owner_id, User.all, :id, :email_address, 
-          { selected: Current.user.id, include_blank: true }, 
-          { class: "form-select" } %>
-    </div>
   </div>
   <hr />
   <div class="d-grid gap-2">

@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_24_040145) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_26_081518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "attendances", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "lottery_id", null: false
+    t.integer "virtual_users_count", default: 0, null: false
+    t.datetime "joined_at", null: false
+    t.string "status", default: "active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lottery_id", "status", "user_id"], name: "index_attendances_on_lottery_status_user"
+    t.index ["lottery_id", "status"], name: "index_attendances_on_lottery_id_and_status"
+    t.index ["lottery_id"], name: "index_attendances_on_lottery_id"
+    t.index ["status"], name: "index_attendances_on_status"
+    t.index ["user_id", "lottery_id"], name: "index_attendances_on_user_id_and_lottery_id", unique: true
+    t.index ["user_id", "status"], name: "index_attendances_on_user_id_and_status"
+    t.index ["user_id"], name: "index_attendances_on_user_id"
+  end
 
   create_table "lotteries", force: :cascade do |t|
     t.string "title"
@@ -22,12 +39,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_040145) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "owner_id"
     t.string "priority"
     t.string "status"
     t.string "meeting_url"
     t.string "meeting_code"
-    t.index ["owner_id"], name: "index_lotteries_on_owner_id"
     t.index ["user_id"], name: "index_lotteries_on_user_id"
   end
 
@@ -86,8 +101,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_040145) do
     t.string "domain"
   end
 
+  add_foreign_key "attendances", "lotteries"
+  add_foreign_key "attendances", "users"
   add_foreign_key "lotteries", "users"
-  add_foreign_key "lotteries", "users", column: "owner_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "sites_pokermons", "virtual_users"
   add_foreign_key "subordinations", "users"
