@@ -1,8 +1,6 @@
 class Lottery < ApplicationRecord
   belongs_to :user  # 创建者
 
-  before_validation :set_default_owner, on: :create
-
   validates :title, :target_url, presence: true
   validates :priority, presence: true
   validates :status, presence: true
